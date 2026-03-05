@@ -1,6 +1,6 @@
 import type { Dimensions, VesselConfig, VolumeResult } from './types';
 
-export type VesselType = 'cylindrical' | 'rectangular' | 'conical';
+export type VesselType = 'cylindrical' | 'rectangular' | 'conical' | 'spherical';
 
 function validateDimensions(dimensions: Dimensions, type: VesselType): void {
   if (type === 'cylindrical') {
@@ -17,6 +17,10 @@ function validateDimensions(dimensions: Dimensions, type: VesselType): void {
   } else if (type === 'conical') {
     if (dimensions.topDiameter == null || dimensions.bottomDiameter == null || dimensions.height == null) {
       throw new Error('Conical vessel requires topDiameter, bottomDiameter, and height');
+    }
+  } else if (type === 'spherical') {
+    if (dimensions.diameter == null && dimensions.radius == null) {
+      throw new Error('Spherical vessel requires diameter or radius');
     }
   }
 }
@@ -72,6 +76,20 @@ function conicalVolume(dimensions: Dimensions, liquidHeight: number): VolumeResu
   return { volume, percentage: (volume / totalVolume) * 100 };
 }
 
+function sphericalVolume(dimensions: Dimensions, liquidHeight: number): VolumeResult {
+  const diameter = dimensions.diameter ?? (dimensions.radius! * 2);
+  const radius = diameter / 2;
+  const totalVolume = (4 / 3) * Math.PI * radius * radius * radius;
+
+  if (liquidHeight <= 0) return { volume: 0, percentage: 0 };
+  if (liquidHeight >= diameter) return { volume: totalVolume, percentage: 100 };
+
+  // Volume of spherical cap: V = pi * h^2 * (3r - h) / 3
+  const h = liquidHeight;
+  const volume = (Math.PI * h * h * (3 * radius - h)) / 3;
+  return { volume, percentage: (volume / totalVolume) * 100 };
+}
+
 export function calculateVolume(config: VesselConfig, liquidHeight: number): VolumeResult {
   validateDimensions(config.dimensions, config.type);
   if (liquidHeight < 0) throw new Error('Liquid height cannot be negative');
@@ -83,6 +101,8 @@ export function calculateVolume(config: VesselConfig, liquidHeight: number): Vol
       return rectangularVolume(config.dimensions, liquidHeight);
     case 'conical':
       return conicalVolume(config.dimensions, liquidHeight);
+    case 'spherical':
+      return sphericalVolume(config.dimensions, liquidHeight);
     default:
       throw new Error(`Unsupported vessel type: ${config.type}`);
   }

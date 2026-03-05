@@ -45,3 +45,73 @@ export interface CalculationResult {
   readonly percentage: number;
   readonly unit: Unit;
 }
+
+// --- v0.2.0: Industrial Tank Monitoring ---
+
+export interface StrappingEntry {
+  readonly height: number;
+  readonly volume: number;
+  readonly percentage: number;
+}
+
+export interface StrappingOptions {
+  readonly steps?: number;
+  readonly unit?: Unit;
+  readonly precision?: number;
+}
+
+export interface FillRateInput {
+  readonly vessel: VesselConfig;
+  readonly heightBefore: number;
+  readonly heightAfter: number;
+  readonly timeMinutes: number;
+}
+
+export interface FillRateResult {
+  readonly ratePerMinute: number;
+  readonly ratePerHour: number;
+  readonly direction: 'filling' | 'draining' | 'stable';
+  readonly volumeChange: number;
+  readonly minutesToFull: number | null;
+  readonly minutesToEmpty: number | null;
+  readonly percentBefore: number;
+  readonly percentAfter: number;
+}
+
+export interface AlarmConfig {
+  readonly highHigh?: number;
+  readonly high?: number;
+  readonly low?: number;
+  readonly lowLow?: number;
+}
+
+export type AlarmStatus = 'normal' | 'high' | 'high-high' | 'low' | 'low-low';
+
+export interface AlarmResult {
+  readonly status: AlarmStatus;
+  readonly percentage: number;
+  readonly activeAlarms: readonly AlarmStatus[];
+  readonly isAlarmed: boolean;
+}
+
+export interface TankReading {
+  readonly name: string;
+  readonly vessel: VesselConfig;
+  readonly liquidHeight: number;
+  readonly unit?: Unit;
+}
+
+export interface InventoryEntry {
+  readonly name: string;
+  readonly volume: number;
+  readonly percentage: number;
+  readonly unit: Unit;
+}
+
+export interface InventoryResult {
+  readonly tanks: readonly InventoryEntry[];
+  readonly totalVolume: number;
+  readonly averagePercentage: number;
+  readonly count: number;
+  readonly unit: Unit;
+}
