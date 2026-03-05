@@ -4,6 +4,8 @@
 
 Zero dependencies. TypeScript first. Built for IoT, SCADA, and process control.
 
+**[Try the Interactive Demo](https://che0md.tech/pages/tank-demo.html)** -- live calculator with SVG tank visualization, printable strapping charts, fill rate tools, alarms & multi-tank inventory.
+
 ## Who is this for?
 
 - **Process engineers** -- tank gauging, calibration charts, level monitoring

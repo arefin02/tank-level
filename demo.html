@@ -12,7 +12,6 @@
             --bg: #0b0b1a;
             --surface: rgba(18, 18, 36, 0.85);
             --border: rgba(255,255,255,0.08);
-            --border-hover: rgba(0,212,255,0.3);
             --text: #e0e0e0;
             --muted: #7a7a9a;
             --cyan: #00D4FF;
@@ -26,7 +25,7 @@
             --radius: 8px;
         }
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { font-size: 13px; }
+        html { font-size: 16px; }
         body {
             font-family: var(--font);
             background: var(--bg);
@@ -40,7 +39,7 @@
             display: flex;
             align-items: center;
             gap: 1rem;
-            padding: 0.5rem 1rem;
+            padding: 0.4rem 1rem;
             background: rgba(10,10,26,0.95);
             border-bottom: 1px solid var(--border);
             position: sticky;
@@ -50,126 +49,180 @@
         }
         .toolbar .logo {
             font-weight: 700;
-            font-size: 1.1rem;
-            white-space: nowrap;
+            font-size: 1rem;
             background: var(--grad);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
         .toolbar .version {
-            font-size: 0.75rem;
+            font-size: 0.65rem;
             background: var(--grad);
             color: #fff;
-            padding: 0.15rem 0.5rem;
+            padding: 0.1rem 0.4rem;
             border-radius: 10px;
             font-weight: 600;
         }
-        .toolbar .spacer { flex: 1; }
-        .toolbar .gh-link {
-            color: var(--cyan);
-            text-decoration: none;
-            font-size: 0.85rem;
+
+        /* Tabs */
+        .tab-bar {
+            display: flex;
+            gap: 0;
+            margin-left: 1.5rem;
         }
+        .tab-btn {
+            padding: 0.35rem 1rem;
+            border: 1px solid var(--border);
+            border-bottom: none;
+            background: transparent;
+            color: var(--muted);
+            font-family: var(--font);
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
+            border-radius: 6px 6px 0 0;
+            position: relative;
+            top: 1px;
+        }
+        .tab-btn.active {
+            background: var(--bg);
+            color: var(--cyan);
+            border-color: var(--border);
+            font-weight: 700;
+        }
+        .tab-btn:hover:not(.active) { color: var(--text); }
+        .toolbar .spacer { flex: 1; }
+        .toolbar .gh-link { color: var(--cyan); text-decoration: none; font-size: 0.8rem; }
 
         /* === EXPORT BAR === */
         .export-bar {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            padding: 0.4rem 1rem;
-            background: linear-gradient(90deg, rgba(0,212,255,0.08), rgba(123,47,190,0.08));
+            padding: 0.35rem 1rem;
+            background: linear-gradient(90deg, rgba(0,212,255,0.06), rgba(123,47,190,0.06));
             border-bottom: 1px solid var(--border);
         }
         .export-bar .label {
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             color: var(--muted);
-            font-weight: 500;
-            margin-right: 0.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
         .export-btn {
             display: inline-flex;
             align-items: center;
-            gap: 0.35rem;
-            padding: 0.35rem 0.75rem;
+            gap: 0.3rem;
+            padding: 0.3rem 0.6rem;
             border: 1px solid var(--border);
             border-radius: var(--radius);
             background: var(--surface);
             color: var(--text);
             font-family: var(--font);
-            font-size: 0.8rem;
-            font-weight: 500;
+            font-size: 0.75rem;
             cursor: pointer;
             transition: all 0.15s;
         }
         .export-btn:hover { border-color: var(--cyan); color: #fff; }
-        .export-btn.primary {
-            background: var(--grad);
-            border-color: transparent;
-            color: #fff;
-        }
-        .export-btn.primary:hover { opacity: 0.9; }
-        .export-btn svg { width: 14px; height: 14px; fill: currentColor; }
+        .export-btn.primary { background: var(--grad); border-color: transparent; color: #fff; }
+        .export-btn svg { width: 13px; height: 13px; fill: currentColor; }
 
-        /* === MAIN LAYOUT === */
-        .dashboard {
-            display: grid;
-            grid-template-columns: 220px 200px 1fr;
-            grid-template-rows: auto 1fr;
+        /* === TAB PAGES === */
+        .tab-page { display: none; }
+        .tab-page.active { display: grid; }
+
+        /* === CALCULATOR TAB === */
+        .tab-calc {
+            grid-template-columns: 240px 220px 1fr;
             gap: 0;
-            height: calc(100vh - 72px);
+            height: calc(100vh - 68px);
             min-height: 500px;
         }
-
-        /* Left panel: controls */
         .panel-controls {
-            grid-row: 1 / 3;
             border-right: 1px solid var(--border);
             overflow-y: auto;
-            padding: 0.75rem;
+            padding: 0.6rem;
             background: var(--surface);
         }
-
-        /* Center: tank SVG */
         .panel-tank {
-            grid-row: 1 / 3;
             display: flex;
             align-items: center;
             justify-content: center;
             border-right: 1px solid var(--border);
             background: rgba(0,0,0,0.2);
-            padding: 0.5rem;
+            padding: 0.75rem 0.5rem;
             position: relative;
+            overflow: hidden;
         }
-
-        /* Right: data panels */
         .panel-data {
-            grid-row: 1 / 3;
-            display: grid;
-            grid-template-rows: auto auto 1fr;
+            display: flex;
+            flex-direction: column;
             overflow-y: auto;
         }
 
+        /* === TOOLS TAB === */
+        .tab-tools {
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            height: calc(100vh - 68px);
+            overflow-y: auto;
+        }
+        .tool-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1rem;
+        }
+        .tool-card h3 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--cyan);
+            margin-bottom: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .tool-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .tool-card .ctrl-group { margin-bottom: 0.5rem; }
+        .tool-result {
+            margin-top: 0.75rem;
+            padding: 0.75rem;
+            background: rgba(0,0,0,0.2);
+            border-radius: 6px;
+            font-family: var(--mono);
+            font-size: 0.85rem;
+            line-height: 1.8;
+        }
+        .tool-result .val { color: var(--cyan); font-weight: 600; }
+        .tool-result .lbl { color: var(--muted); }
+
         /* === SECTIONS === */
         .section {
-            padding: 0.6rem 0.75rem;
+            padding: 0.5rem 0.6rem;
             border-bottom: 1px solid var(--border);
         }
         .section-title {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.08em;
             color: var(--muted);
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.3rem;
         }
 
         /* === FORM CONTROLS === */
-        .ctrl-group { margin-bottom: 0.5rem; }
+        .ctrl-group { margin-bottom: 0.4rem; }
         .ctrl-group label {
             display: block;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--muted);
-            margin-bottom: 0.2rem;
+            margin-bottom: 0.15rem;
             font-weight: 500;
         }
         .ctrl-group select, .ctrl-group input[type="number"] {
@@ -177,24 +230,16 @@
             background: rgba(0,0,0,0.3);
             border: 1px solid var(--border);
             border-radius: 4px;
-            padding: 0.35rem 0.5rem;
+            padding: 0.3rem 0.4rem;
             color: var(--text);
             font-family: var(--mono);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
-        .ctrl-group select:focus, .ctrl-group input:focus {
-            outline: none;
-            border-color: var(--cyan);
-        }
+        .ctrl-group select:focus, .ctrl-group input:focus { outline: none; border-color: var(--cyan); }
         input[type=number]::-webkit-inner-spin-button,
         input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
         input[type=number] { -moz-appearance: textfield; }
-
-        .dim-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.35rem;
-        }
+        .dim-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.3rem; }
         .dim-group { display: none; }
         .dim-group.active { display: block; }
 
@@ -202,61 +247,50 @@
         input[type="range"] {
             -webkit-appearance: none;
             width: 100%;
-            height: 6px;
+            height: 5px;
             background: rgba(255,255,255,0.1);
             border-radius: 3px;
             outline: none;
-            margin: 0.3rem 0;
+            margin: 0.25rem 0;
         }
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 16px;
-            height: 16px;
+            width: 14px; height: 14px;
             background: #fff;
             border-radius: 50%;
             cursor: pointer;
             border: 3px solid var(--purple);
         }
         input[type="range"]::-webkit-slider-runnable-track {
-            height: 6px;
+            height: 5px;
             border-radius: 3px;
             background: linear-gradient(to right, var(--cyan), var(--purple));
         }
 
-        /* Unit toggle */
-        .unit-row {
-            display: flex;
-            gap: 2px;
-            margin-top: 0.4rem;
-        }
+        .unit-row { display: flex; gap: 2px; margin-top: 0.3rem; }
         .unit-btn {
             flex: 1;
-            padding: 0.25rem;
+            padding: 0.2rem;
             border: 1px solid var(--border);
             background: transparent;
             color: var(--muted);
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-family: var(--font);
             cursor: pointer;
             transition: all 0.15s;
         }
         .unit-btn:first-child { border-radius: 4px 0 0 4px; }
         .unit-btn:last-child { border-radius: 0 4px 4px 0; }
-        .unit-btn.active {
-            background: var(--grad);
-            color: #fff;
-            border-color: transparent;
-            font-weight: 600;
-        }
+        .unit-btn.active { background: var(--grad); color: #fff; border-color: transparent; font-weight: 600; }
 
-        /* === VOLUME READOUT === */
+        /* === READOUT === */
         .readout {
             text-align: center;
-            padding: 0.75rem 0;
+            padding: 0.6rem 0;
             border-bottom: 1px solid var(--border);
         }
         .readout .big {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 700;
             font-family: var(--mono);
             background: var(--grad);
@@ -264,12 +298,8 @@
             -webkit-text-fill-color: transparent;
             line-height: 1.1;
         }
-        .readout .unit { font-size: 0.85rem; color: var(--muted); }
-        .readout .pct {
-            font-size: 1.1rem;
-            font-weight: 500;
-            margin-top: 0.1rem;
-        }
+        .readout .unit { font-size: 0.8rem; color: var(--muted); }
+        .readout .pct { font-size: 1rem; font-weight: 500; margin-top: 0.1rem; }
 
         /* === TANK SVG === */
         .tank-svg-wrap {
@@ -278,94 +308,83 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
         }
-        #tank-svg {
-            width: 160px;
-            height: auto;
-            max-height: 90%;
-        }
-        .tank-outline {
-            stroke: var(--cyan);
-            stroke-width: 2;
-            fill: none;
-        }
-        .liquid-fill {
-            fill: url(#wavePattern);
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            transform-origin: bottom;
+        #tank-svg { max-width: 180px; max-height: 90%; }
+        .tank-outline { stroke: var(--cyan); stroke-width: 2; fill: none; }
+
+        /* Liquid gradient fill */
+        .liquid-body {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Ruler markings */
+        /* Bubble animation */
+        .bubble {
+            fill: rgba(255,255,255,0.15);
+            animation: rise linear infinite;
+        }
+        @keyframes rise {
+            0% { transform: translateY(0) scale(1); opacity: 0.6; }
+            50% { opacity: 0.3; }
+            100% { transform: translateY(-250px) scale(0.3); opacity: 0; }
+        }
+
+        /* Surface shimmer */
+        .surface-line {
+            stroke: rgba(255,255,255,0.4);
+            stroke-width: 1.5;
+            fill: none;
+        }
+
+        /* Ruler */
         .ruler {
             position: absolute;
-            left: 0;
-            top: 10%;
-            bottom: 10%;
-            width: 28px;
+            left: 2px;
+            top: 8%;
+            bottom: 8%;
+            width: 30px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             pointer-events: none;
         }
-        .ruler-tick {
-            display: flex;
-            align-items: center;
-            height: 0;
-            position: relative;
-        }
-        .ruler-tick .line {
-            width: 12px;
-            height: 1px;
-            margin-left: auto;
-        }
+        .ruler-tick { display: flex; align-items: center; height: 0; position: relative; }
+        .ruler-tick .line { width: 12px; height: 1px; margin-left: auto; }
         .ruler-tick .line.major { background: var(--cyan); width: 18px; }
-        .ruler-tick .line.minor { background: rgba(0,212,255,0.3); }
+        .ruler-tick .line.minor { background: rgba(0,212,255,0.25); }
         .ruler-tick .lbl {
             position: absolute;
-            right: 22px;
-            font-size: 0.6rem;
+            right: 20px;
+            font-size: 0.55rem;
             font-family: var(--mono);
             color: var(--cyan);
             white-space: nowrap;
         }
-
-        /* Percentage ruler (right side) */
         .ruler-pct {
             position: absolute;
-            right: 0;
-            top: 10%;
-            bottom: 10%;
-            width: 32px;
+            right: 2px;
+            top: 8%;
+            bottom: 8%;
+            width: 34px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             pointer-events: none;
         }
-        .ruler-pct .tick {
-            display: flex;
-            align-items: center;
-            height: 0;
-        }
-        .ruler-pct .tick .bar {
-            height: 1px;
-            width: 10px;
-        }
+        .ruler-pct .tick { display: flex; align-items: center; height: 0; }
+        .ruler-pct .tick .bar { height: 1px; width: 10px; }
         .ruler-pct .tick .bar.major { background: var(--purple); width: 14px; }
-        .ruler-pct .tick .bar.minor { background: rgba(123,47,190,0.3); }
+        .ruler-pct .tick .bar.minor { background: rgba(123,47,190,0.25); }
         .ruler-pct .tick .plbl {
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             font-family: var(--mono);
             color: var(--purple);
             margin-left: 2px;
-            white-space: nowrap;
         }
 
-        /* Current level indicator */
         .level-indicator {
             position: absolute;
-            left: 28px;
-            right: 32px;
+            left: 32px;
+            right: 36px;
             height: 2px;
             background: var(--yellow);
             box-shadow: 0 0 6px var(--yellow);
@@ -375,238 +394,126 @@
         .level-indicator::after {
             content: attr(data-label);
             position: absolute;
-            right: -34px;
-            top: -8px;
-            font-size: 0.65rem;
+            right: -36px;
+            top: -7px;
+            font-size: 0.6rem;
             font-family: var(--mono);
             color: var(--yellow);
             font-weight: 600;
         }
 
-        /* === DATA PANELS (right side) === */
-        .data-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-        }
+        /* === DATA PANELS === */
         .data-cell {
-            padding: 0.5rem 0.75rem;
+            padding: 0.4rem 0.6rem;
             border-bottom: 1px solid var(--border);
             border-right: 1px solid var(--border);
         }
         .data-cell:last-child { border-right: none; }
         .data-cell .cell-title {
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             text-transform: uppercase;
             letter-spacing: 0.06em;
             color: var(--muted);
             font-weight: 600;
-            margin-bottom: 0.2rem;
         }
-        .data-cell .cell-value {
-            font-family: var(--mono);
-            font-size: 0.95rem;
-            font-weight: 500;
-        }
+        .data-cell .cell-value { font-family: var(--mono); font-size: 0.85rem; font-weight: 500; }
 
-        /* Alarm strip */
         .alarm-strip {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.4rem;
             align-items: center;
-            padding: 0.5rem 0.75rem;
+            padding: 0.4rem 0.6rem;
             border-bottom: 1px solid var(--border);
         }
-        .alarm-light {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #333;
-            transition: all 0.3s;
-            flex-shrink: 0;
-        }
+        .alarm-light { width: 10px; height: 10px; border-radius: 50%; background: #333; transition: all 0.3s; flex-shrink: 0; }
         .alarm-light.on-red { background: var(--red); box-shadow: 0 0 8px var(--red); }
         .alarm-light.on-yellow { background: var(--yellow); box-shadow: 0 0 8px var(--yellow); }
         .alarm-light.on-green { background: var(--green); box-shadow: 0 0 8px var(--green); }
         .alarm-light.pulse { animation: pulse 1s infinite; }
-        @keyframes pulse {
-            50% { box-shadow: 0 0 16px 4px currentColor; }
-        }
+        @keyframes pulse { 50% { box-shadow: 0 0 16px 4px currentColor; } }
         .alarm-tag {
-            font-size: 0.7rem;
-            font-weight: 600;
-            padding: 0.15rem 0.4rem;
-            border-radius: 3px;
-            font-family: var(--mono);
+            font-size: 0.65rem; font-weight: 600; padding: 0.12rem 0.35rem;
+            border-radius: 3px; font-family: var(--mono);
         }
         .alarm-tag.normal { background: rgba(40,167,69,0.2); color: var(--green); }
         .alarm-tag.warning { background: rgba(255,193,7,0.2); color: var(--yellow); }
         .alarm-tag.danger { background: rgba(220,53,69,0.2); color: var(--red); }
+
         .alarm-sliders-compact {
             display: grid;
-            grid-template-columns: 25px 1fr 45px;
-            gap: 0.2rem 0.5rem;
+            grid-template-columns: 22px 1fr 42px;
+            gap: 0.15rem 0.4rem;
             align-items: center;
-            font-size: 0.75rem;
         }
-        .alarm-sliders-compact label { color: var(--muted); font-weight: 600; font-size: 0.7rem; }
+        .alarm-sliders-compact label { color: var(--muted); font-weight: 600; font-size: 0.65rem; }
         .alarm-sliders-compact input[type="number"] {
-            width: 45px;
+            width: 42px;
             background: rgba(0,0,0,0.3);
             border: 1px solid var(--border);
             border-radius: 3px;
-            padding: 0.15rem 0.25rem;
+            padding: 0.1rem 0.2rem;
             color: var(--text);
             font-family: var(--mono);
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             text-align: right;
         }
         .alarm-sliders-compact input[type="number"]:focus { outline: none; border-color: var(--cyan); }
 
-        /* Fill rate compact */
-        .fill-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 0.35rem;
-        }
-        .fill-result {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            padding: 0.35rem 0;
-        }
-        .fill-arrow {
-            font-size: 1.2rem;
-            line-height: 1;
-        }
+        .fill-arrow { font-size: 1rem; line-height: 1; }
         .fill-arrow.up { color: var(--green); }
         .fill-arrow.down { color: var(--red); }
         .fill-arrow.stable { color: var(--muted); }
 
-        /* Strapping table */
-        .strapping-wrap {
-            overflow-y: auto;
-            flex: 1;
-            min-height: 0;
-        }
-        .strapping-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-family: var(--mono);
-            font-size: 0.8rem;
-        }
+        /* Strapping */
+        .strapping-wrap { overflow-y: auto; flex: 1; min-height: 0; }
+        .strapping-table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 0.75rem; }
         .strapping-table th {
-            position: sticky;
-            top: 0;
-            background: var(--bg);
-            color: var(--cyan);
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            padding: 0.35rem 0.5rem;
-            text-align: right;
-            border-bottom: 1px solid var(--cyan);
-            z-index: 1;
+            position: sticky; top: 0; background: var(--bg); color: var(--cyan);
+            font-size: 0.65rem; font-weight: 600; text-transform: uppercase;
+            padding: 0.3rem 0.4rem; text-align: right; border-bottom: 1px solid var(--cyan); z-index: 1;
         }
         .strapping-table th:first-child { text-align: left; }
         .strapping-table td {
-            padding: 0.25rem 0.5rem;
-            text-align: right;
+            padding: 0.2rem 0.4rem; text-align: right;
             border-bottom: 1px solid var(--border);
-            color: var(--text);
         }
         .strapping-table td:first-child { text-align: left; color: var(--muted); }
         .strapping-table tr:hover td { background: rgba(0,212,255,0.05); }
         .strapping-table td .bar {
-            display: inline-block;
-            height: 8px;
-            background: var(--grad);
-            border-radius: 2px;
-            vertical-align: middle;
-            margin-right: 0.3rem;
-            transition: width 0.2s;
+            display: inline-block; height: 7px; background: var(--grad);
+            border-radius: 2px; vertical-align: middle; margin-right: 0.2rem;
         }
         .strapping-controls-row {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.4rem 0.75rem;
-            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; gap: 0.4rem;
+            padding: 0.3rem 0.6rem; border-bottom: 1px solid var(--border);
         }
-        .strapping-controls-row label {
-            font-size: 0.7rem;
-            color: var(--muted);
-            font-weight: 500;
-            white-space: nowrap;
-        }
+        .strapping-controls-row label { font-size: 0.65rem; color: var(--muted); font-weight: 500; white-space: nowrap; }
         .strapping-controls-row input[type="range"] { flex: 1; }
-        .strapping-controls-row .steps-val {
-            font-family: var(--mono);
-            font-size: 0.8rem;
-            min-width: 25px;
-            text-align: center;
-        }
+        .strapping-controls-row .steps-val { font-family: var(--mono); font-size: 0.75rem; min-width: 22px; text-align: center; }
 
-        /* Inventory compact */
+        /* Inventory */
         .inv-item {
-            display: grid;
-            grid-template-columns: 50px 1fr 45px;
-            gap: 0.5rem;
-            align-items: center;
-            padding: 0.3rem 0.75rem;
-            border-bottom: 1px solid var(--border);
-            cursor: pointer;
-            transition: background 0.15s;
+            display: grid; grid-template-columns: 48px 1fr 40px; gap: 0.4rem;
+            align-items: center; padding: 0.25rem 0.6rem;
+            border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.15s;
         }
         .inv-item:hover { background: rgba(0,212,255,0.05); }
-        .inv-item .inv-id {
-            font-family: var(--mono);
-            font-weight: 600;
-            font-size: 0.8rem;
-        }
-        .inv-item .inv-bar {
-            height: 6px;
-            background: rgba(255,255,255,0.08);
-            border-radius: 3px;
-            overflow: hidden;
-        }
-        .inv-item .inv-bar-inner {
-            height: 100%;
-            background: var(--grad);
-            border-radius: 3px;
-            transition: width 0.3s;
-        }
-        .inv-item .inv-vol {
-            font-size: 0.7rem;
-            color: var(--muted);
-            font-family: var(--mono);
-        }
-        .inv-item .inv-pct {
-            font-family: var(--mono);
-            font-size: 0.8rem;
-            text-align: right;
-        }
+        .inv-item .inv-id { font-family: var(--mono); font-weight: 600; font-size: 0.75rem; }
+        .inv-item .inv-bar { height: 5px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; }
+        .inv-item .inv-bar-inner { height: 100%; background: var(--grad); border-radius: 3px; transition: width 0.3s; }
+        .inv-item .inv-vol { font-size: 0.65rem; color: var(--muted); font-family: var(--mono); }
+        .inv-item .inv-pct { font-family: var(--mono); font-size: 0.75rem; text-align: right; }
         .inv-totals {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.4rem 0.75rem;
-            font-size: 0.8rem;
-            font-weight: 600;
-            background: rgba(0,0,0,0.15);
+            display: flex; justify-content: space-between; padding: 0.3rem 0.6rem;
+            font-size: 0.75rem; font-weight: 600; background: rgba(0,0,0,0.15);
             border-bottom: 1px solid var(--border);
         }
         .inv-totals span:last-child { font-family: var(--mono); }
 
-        /* Disclaimer bar */
         .disclaimer {
-            padding: 0.3rem 0.75rem;
-            font-size: 0.65rem;
-            color: var(--muted);
-            background: rgba(255,180,0,0.03);
-            border-top: 1px solid rgba(255,180,0,0.15);
+            padding: 0.25rem 0.6rem; font-size: 0.6rem; color: var(--muted);
+            background: rgba(255,180,0,0.03); border-top: 1px solid rgba(255,180,0,0.15);
         }
-
-        /* Scrollbar */
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
@@ -618,815 +525,841 @@
             body * { visibility: hidden; }
             #print-view, #print-view * { visibility: visible; }
             #print-view {
-                display: block !important;
-                position: absolute;
-                left: 0; top: 0;
-                width: 100%;
-                color: #000;
-                background: #fff;
+                display: block !important; position: absolute; left: 0; top: 0;
+                width: 100%; color: #000; background: #fff;
             }
-            .print-header {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 0.5rem;
-                padding-bottom: 1rem;
-                border-bottom: 2px solid #000;
-                margin-bottom: 1rem;
-            }
+            .print-header { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; padding-bottom: 1rem; border-bottom: 2px solid #000; margin-bottom: 1rem; }
             .print-header input { border: none; font-size: 18pt; font-weight: bold; }
             .print-header .co { text-align: right; }
             .print-header .co input { text-align: right; font-size: 14pt; }
-            .print-meta {
-                display: grid;
-                grid-template-columns: repeat(4, 1fr);
-                gap: 0.3rem 1.5rem;
-                margin-bottom: 1rem;
-                font-size: 9pt;
-            }
+            .print-meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.3rem 1.5rem; margin-bottom: 1rem; font-size: 9pt; }
             .print-meta-item label { font-weight: bold; color: #555; font-size: 8pt; }
-            .print-meta-item input, .print-meta-item span {
-                padding: 3px; border: 1px solid #ccc; border-radius: 3px;
-                font-size: 9pt; background: #f9f9f9; display: block; width: 100%;
-            }
+            .print-meta-item input, .print-meta-item span { padding: 3px; border: 1px solid #ccc; border-radius: 3px; font-size: 9pt; background: #f9f9f9; display: block; width: 100%; }
             .print-table { width: 100%; border-collapse: collapse; font-size: 8pt; }
             .print-table th, .print-table td { border: 1px solid #ccc; padding: 4px 6px; text-align: right; }
             .print-table th { background: #e0e0e0; font-weight: bold; }
             .print-table tr:nth-child(even) { background: #f5f5f5; }
-            .print-disclaimer {
-                margin-top: 0.75rem; padding: 0.4rem;
-                border: 1px solid #999; font-size: 7pt; color: #666;
-            }
-            .print-footer {
-                margin-top: 1rem; padding-top: 0.5rem; border-top: 1px solid #000;
-                display: flex; justify-content: space-between; align-items: flex-end;
-                font-size: 7pt; color: #555;
-            }
+            .print-disclaimer { margin-top: 0.75rem; padding: 0.4rem; border: 1px solid #999; font-size: 7pt; color: #666; }
+            .print-footer { margin-top: 1rem; padding-top: 0.5rem; border-top: 1px solid #000; display: flex; justify-content: space-between; align-items: flex-end; font-size: 7pt; color: #555; }
             .sig-line { margin-top: 2rem; border-top: 1px solid #000; width: 200px; padding-top: 3px; text-align: center; }
         }
-
-        /* Responsive */
         @media (max-width: 900px) {
-            .dashboard {
-                grid-template-columns: 1fr;
-                grid-template-rows: auto auto auto;
-                height: auto;
-            }
-            .panel-controls { grid-row: auto; border-right: none; border-bottom: 1px solid var(--border); }
-            .panel-tank { grid-row: auto; border-right: none; min-height: 300px; }
-            .panel-data { grid-row: auto; }
+            .tab-calc { grid-template-columns: 1fr; height: auto; }
+            .panel-controls, .panel-tank, .panel-data { border-right: none; border-bottom: 1px solid var(--border); }
+            .panel-tank { min-height: 300px; }
+            .tab-tools { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-    <!-- TOOLBAR -->
-    <div class="toolbar">
-        <span class="logo">tank-level</span>
-        <span class="version">v0.2.5</span>
-        <span class="spacer"></span>
-        <a href="https://github.com/AdametherzLab/tank-level" target="_blank" class="gh-link">GitHub</a>
+<!-- TOOLBAR -->
+<div class="toolbar">
+    <span class="logo">tank-level</span>
+    <span class="version">v0.3.0</span>
+    <div class="tab-bar">
+        <button class="tab-btn active" data-tab="calc">Calculator</button>
+        <button class="tab-btn" data-tab="tools">Fill Rate &amp; Tools</button>
     </div>
+    <span class="spacer"></span>
+    <a href="https://github.com/AdametherzLab/tank-level" target="_blank" class="gh-link">GitHub</a>
+</div>
 
-    <!-- EXPORT BAR -->
-    <div class="export-bar">
-        <span class="label">EXPORT</span>
-        <button class="export-btn primary" id="print-chart-btn">
-            <svg viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
-            Print Strapping Chart
-        </button>
-        <button class="export-btn" id="copy-csv-btn">
-            <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-            Copy CSV
-        </button>
-        <button class="export-btn" id="download-csv-btn">
-            <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-            Download CSV
-        </button>
-        <button class="export-btn" id="download-json-btn">
-            <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-            Download JSON
-        </button>
-    </div>
+<!-- EXPORT BAR -->
+<div class="export-bar">
+    <span class="label">Export</span>
+    <button class="export-btn primary" id="print-chart-btn">
+        <svg viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
+        Print Chart
+    </button>
+    <button class="export-btn" id="copy-csv-btn">
+        <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+        Copy CSV
+    </button>
+    <button class="export-btn" id="download-csv-btn">
+        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+        CSV
+    </button>
+    <button class="export-btn" id="download-json-btn">
+        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+        JSON
+    </button>
+</div>
 
-    <!-- DASHBOARD -->
-    <div class="dashboard">
-
-        <!-- LEFT: Controls -->
-        <div class="panel-controls">
-            <div class="section">
-                <div class="section-title">Vessel Type</div>
-                <div class="ctrl-group">
-                    <select id="vessel-type">
-                        <option value="cylindrical_vertical">Cylindrical (Vertical)</option>
-                        <option value="cylindrical_horizontal">Cylindrical (Horizontal)</option>
-                        <option value="rectangular">Rectangular</option>
-                        <option value="conical">Conical Frustum</option>
-                        <option value="spherical">Spherical</option>
-                    </select>
-                </div>
+<!-- ==================== TAB 1: CALCULATOR ==================== -->
+<div class="tab-page tab-calc active" id="tab-calc">
+    <!-- LEFT: Controls -->
+    <div class="panel-controls">
+        <div class="section">
+            <div class="section-title">Vessel Type</div>
+            <div class="ctrl-group">
+                <select id="vessel-type">
+                    <option value="cylindrical_vertical">Cylindrical (Vertical)</option>
+                    <option value="cylindrical_horizontal">Cylindrical (Horizontal)</option>
+                    <option value="rectangular">Rectangular</option>
+                    <option value="conical">Conical Frustum</option>
+                    <option value="spherical">Spherical</option>
+                </select>
             </div>
-
-            <div class="section">
-                <div class="section-title">Dimensions</div>
-                <div class="dim-group active" data-type="cylindrical_vertical">
-                    <div class="dim-row">
-                        <div class="ctrl-group"><label>Diameter (m)</label><input type="number" id="cv-diameter" value="2" step="0.1"></div>
-                        <div class="ctrl-group"><label>Height (m)</label><input type="number" id="cv-height" value="5" step="0.1"></div>
-                    </div>
-                </div>
-                <div class="dim-group" data-type="cylindrical_horizontal">
-                    <div class="dim-row">
-                        <div class="ctrl-group"><label>Diameter (m)</label><input type="number" id="ch-diameter" value="2" step="0.1"></div>
-                        <div class="ctrl-group"><label>Length (m)</label><input type="number" id="ch-length" value="5" step="0.1"></div>
-                    </div>
-                </div>
-                <div class="dim-group" data-type="rectangular">
-                    <div class="dim-row">
-                        <div class="ctrl-group"><label>Length (m)</label><input type="number" id="r-length" value="4" step="0.1"></div>
-                        <div class="ctrl-group"><label>Width (m)</label><input type="number" id="r-width" value="3" step="0.1"></div>
-                    </div>
-                    <div class="ctrl-group"><label>Height (m)</label><input type="number" id="r-height" value="2" step="0.1"></div>
-                </div>
-                <div class="dim-group" data-type="conical">
-                    <div class="dim-row">
-                        <div class="ctrl-group"><label>Bottom Dia (m)</label><input type="number" id="co-bottom-diameter" value="3" step="0.1"></div>
-                        <div class="ctrl-group"><label>Top Dia (m)</label><input type="number" id="co-top-diameter" value="1" step="0.1"></div>
-                    </div>
-                    <div class="ctrl-group"><label>Height (m)</label><input type="number" id="co-height" value="4" step="0.1"></div>
-                </div>
-                <div class="dim-group" data-type="spherical">
-                    <div class="ctrl-group"><label>Diameter (m)</label><input type="number" id="s-diameter" value="3" step="0.1"></div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">Liquid Height</div>
-                <input type="range" id="liquid-height-slider" min="0" max="5" step="0.01" value="2.5">
-                <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--muted);font-family:var(--mono);">
-                    <span>0</span>
-                    <span id="height-value" style="color:var(--cyan);font-weight:600;">2.50 m</span>
-                    <span id="max-height-label">5.00</span>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">Units</div>
-                <div class="unit-row" id="unit-toggle">
-                    <button class="unit-btn active" data-unit="m3">m&sup3;</button>
-                    <button class="unit-btn" data-unit="liters">L</button>
-                    <button class="unit-btn" data-unit="gallons">gal</button>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">Alarm Thresholds</div>
-                <div class="alarm-sliders-compact">
-                    <label>HH</label><input type="range" id="hh-slider" min="0" max="100" value="95"><input type="number" id="hh-input" min="0" max="100" value="95">
-                    <label>H</label><input type="range" id="h-slider" min="0" max="100" value="85"><input type="number" id="h-input" min="0" max="100" value="85">
-                    <label>L</label><input type="range" id="l-slider" min="0" max="100" value="15"><input type="number" id="l-input" min="0" max="100" value="15">
-                    <label>LL</label><input type="range" id="ll-slider" min="0" max="100" value="5"><input type="number" id="ll-input" min="0" max="100" value="5">
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">Fill Rate</div>
+        </div>
+        <div class="section">
+            <div class="section-title">Dimensions</div>
+            <div class="dim-group active" data-type="cylindrical_vertical">
                 <div class="dim-row">
-                    <div class="ctrl-group"><label>H Before (m)</label><input type="number" id="fill-rate-h1" value="1.0" step="0.1"></div>
-                    <div class="ctrl-group"><label>H After (m)</label><input type="number" id="fill-rate-h2" value="1.5" step="0.1"></div>
+                    <div class="ctrl-group"><label>Diameter (m)</label><input type="number" id="cv-diameter" value="2" step="0.1"></div>
+                    <div class="ctrl-group"><label>Height (m)</label><input type="number" id="cv-height" value="5" step="0.1"></div>
                 </div>
-                <div class="ctrl-group"><label>Time (min)</label><input type="number" id="fill-rate-time" value="30" step="1"></div>
+            </div>
+            <div class="dim-group" data-type="cylindrical_horizontal">
+                <div class="dim-row">
+                    <div class="ctrl-group"><label>Diameter (m)</label><input type="number" id="ch-diameter" value="2" step="0.1"></div>
+                    <div class="ctrl-group"><label>Length (m)</label><input type="number" id="ch-length" value="5" step="0.1"></div>
+                </div>
+            </div>
+            <div class="dim-group" data-type="rectangular">
+                <div class="dim-row">
+                    <div class="ctrl-group"><label>Length (m)</label><input type="number" id="r-length" value="4" step="0.1"></div>
+                    <div class="ctrl-group"><label>Width (m)</label><input type="number" id="r-width" value="3" step="0.1"></div>
+                </div>
+                <div class="ctrl-group"><label>Height (m)</label><input type="number" id="r-height" value="2" step="0.1"></div>
+            </div>
+            <div class="dim-group" data-type="conical">
+                <div class="dim-row">
+                    <div class="ctrl-group"><label>Bottom Dia (m)</label><input type="number" id="co-bottom-diameter" value="3" step="0.1"></div>
+                    <div class="ctrl-group"><label>Top Dia (m)</label><input type="number" id="co-top-diameter" value="1" step="0.1"></div>
+                </div>
+                <div class="ctrl-group"><label>Height (m)</label><input type="number" id="co-height" value="4" step="0.1"></div>
+            </div>
+            <div class="dim-group" data-type="spherical">
+                <div class="ctrl-group"><label>Diameter (m)</label><input type="number" id="s-diameter" value="3" step="0.1"></div>
             </div>
         </div>
-
-        <!-- CENTER: Tank SVG with ruler -->
-        <div class="panel-tank">
-            <div class="ruler" id="ruler-left"></div>
-            <div class="tank-svg-wrap">
-                <svg id="tank-svg" viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet">
-                    <defs>
-                        <pattern id="wavePattern" patternUnits="userSpaceOnUse" width="100" height="100" x="0" y="0">
-                            <path d="M 0 50 Q 25 30, 50 50 T 100 50 V 100 H 0 Z" fill="rgba(0,212,255,0.4)"></path>
-                            <path d="M 0 60 Q 25 40, 50 60 T 100 60 V 100 H 0 Z" fill="rgba(0,212,255,0.25)"></path>
-                            <animate attributeName="x" from="0" to="-100" dur="3s" repeatCount="indefinite" />
-                        </pattern>
-                    </defs>
-                    <g id="tank-shape-group"></g>
-                </svg>
+        <div class="section">
+            <div class="section-title">Liquid Height</div>
+            <input type="range" id="liquid-height-slider" min="0" max="5" step="0.01" value="2.5">
+            <div style="display:flex;justify-content:space-between;font-size:0.7rem;color:var(--muted);font-family:var(--mono);">
+                <span>0</span>
+                <span id="height-value" style="color:var(--cyan);font-weight:600;">2.50 m</span>
+                <span id="max-height-label">5.00</span>
             </div>
-            <div class="level-indicator" id="level-indicator" data-label="" style="bottom:50%;"></div>
-            <div class="ruler-pct" id="ruler-right"></div>
         </div>
-
-        <!-- RIGHT: Data panels -->
-        <div class="panel-data">
-            <!-- Readout row -->
-            <div class="readout">
-                <div class="big"><span id="volume-value">7.854</span></div>
-                <div class="unit"><span id="volume-unit">m&sup3;</span></div>
-                <div class="pct"><span id="percentage-value">50.0</span>% Full</div>
+        <div class="section">
+            <div class="section-title">Units</div>
+            <div class="unit-row" id="unit-toggle">
+                <button class="unit-btn active" data-unit="m3">m&sup3;</button>
+                <button class="unit-btn" data-unit="liters">L</button>
+                <button class="unit-btn" data-unit="gallons">gal</button>
             </div>
-
-            <!-- Alarm + Fill rate strip -->
-            <div class="alarm-strip">
-                <div class="alarm-light" id="ll-light"></div>
-                <div class="alarm-light" id="l-light"></div>
-                <div class="alarm-light on-green" id="ok-light"></div>
-                <div class="alarm-light" id="h-light"></div>
-                <div class="alarm-light" id="hh-light"></div>
-                <span id="alarm-tag" class="alarm-tag normal">NORMAL</span>
-                <span style="flex:1"></span>
-                <span id="fill-arrow" class="fill-arrow up">&uarr;</span>
-                <span id="fill-info" style="font-family:var(--mono);font-size:0.8rem;">1.571 m&sup3;/hr</span>
-            </div>
-
-            <!-- Data cells -->
-            <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border);">
-                <div class="data-cell">
-                    <div class="cell-title">Fill Rate</div>
-                    <div class="cell-value" id="fill-rate-display">1.571 m&sup3;/hr</div>
-                </div>
-                <div class="data-cell">
-                    <div class="cell-title">ETA</div>
-                    <div class="cell-value" id="fill-eta-display">3.50 hrs to full</div>
-                </div>
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border);">
-                <div class="data-cell">
-                    <div class="cell-title">Total Capacity</div>
-                    <div class="cell-value" id="total-capacity">15.708 m&sup3;</div>
-                </div>
-                <div class="data-cell">
-                    <div class="cell-title">Current Volume</div>
-                    <div class="cell-value" id="current-volume">7.854 m&sup3;</div>
-                </div>
-            </div>
-
-            <!-- Inventory section -->
-            <div class="section-title" style="padding:0.4rem 0.75rem;border-bottom:1px solid var(--border);">Tank Inventory (click to load)</div>
-            <div id="inventory-list"></div>
-            <div class="inv-totals">
-                <span>Total Inventory</span>
-                <span id="total-inventory-volume-value">0.000 m&sup3;</span>
-            </div>
-
-            <!-- Strapping table -->
-            <div class="strapping-controls-row">
-                <label>Steps</label>
-                <input type="range" id="strapping-steps-slider" min="5" max="100" step="1" value="20">
-                <span class="steps-val" id="strapping-steps-label">20</span>
-            </div>
-            <div class="strapping-wrap">
-                <table class="strapping-table">
-                    <thead>
-                        <tr>
-                            <th>Height</th>
-                            <th id="strapping-volume-unit">Volume (m&sup3;)</th>
-                            <th>%</th>
-                            <th style="width:60px"></th>
-                        </tr>
-                    </thead>
-                    <tbody id="strapping-table-body"></tbody>
-                </table>
-            </div>
-
-            <!-- Disclaimer -->
-            <div class="disclaimer">
-                Estimates based on ideal geometry. Real tanks differ due to deformation, nozzles, internals, thermal expansion.
-                For custody transfer or compliance, use certified calibration per API MPMS Ch. 2.
+        </div>
+        <div class="section">
+            <div class="section-title">Alarm Thresholds</div>
+            <div class="alarm-sliders-compact">
+                <label>HH</label><input type="range" id="hh-slider" min="0" max="100" value="95"><input type="number" id="hh-input" min="0" max="100" value="95">
+                <label>H</label><input type="range" id="h-slider" min="0" max="100" value="85"><input type="number" id="h-input" min="0" max="100" value="85">
+                <label>L</label><input type="range" id="l-slider" min="0" max="100" value="15"><input type="number" id="l-input" min="0" max="100" value="15">
+                <label>LL</label><input type="range" id="ll-slider" min="0" max="100" value="5"><input type="number" id="ll-input" min="0" max="100" value="5">
             </div>
         </div>
     </div>
 
-    <!-- PRINT VIEW -->
-    <div id="print-view">
-        <div class="print-header">
-            <input type="text" id="print-title-input" value="Tank Strapping Chart">
-            <div class="co"><input type="text" id="print-company-input" value="ARPE Engineering"></div>
+    <!-- CENTER: Tank SVG -->
+    <div class="panel-tank">
+        <div class="ruler" id="ruler-left"></div>
+        <div class="tank-svg-wrap">
+            <svg id="tank-svg" viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet">
+                <defs>
+                    <linearGradient id="liquidGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="rgba(0,212,255,0.6)" />
+                        <stop offset="100%" stop-color="rgba(0,100,200,0.85)" />
+                    </linearGradient>
+                </defs>
+                <g id="tank-shape-group"></g>
+            </svg>
         </div>
-        <div class="print-meta">
-            <div class="print-meta-item"><label>Tank ID</label><input type="text" id="print-tank-id" value="T-101"></div>
-            <div class="print-meta-item"><label>Location</label><input type="text" id="print-location" value=""></div>
-            <div class="print-meta-item"><label>Orientation</label><span id="print-orientation"></span></div>
-            <div class="print-meta-item"><label>Dimensions</label><span id="print-dimensions"></span></div>
+        <div class="level-indicator" id="level-indicator" data-label="" style="bottom:50%;"></div>
+        <div class="ruler-pct" id="ruler-right"></div>
+    </div>
+
+    <!-- RIGHT: Data panels -->
+    <div class="panel-data">
+        <div class="readout">
+            <div class="big"><span id="volume-value">7.854</span></div>
+            <div class="unit"><span id="volume-unit">m&sup3;</span></div>
+            <div class="pct"><span id="percentage-value">50.0</span>% Full</div>
         </div>
-        <table class="print-table">
-            <thead><tr>
-                <th>Height (<span id="print-height-unit-label">m</span>)</th>
-                <th>Volume (<span id="print-volume-unit-label">m&sup3;</span>)</th>
-                <th>Percentage</th>
-            </tr></thead>
-            <tbody id="print-table-body"></tbody>
-        </table>
-        <div class="print-disclaimer">
-            <strong>DISCLAIMER:</strong> Mathematical estimates based on ideal geometry. Actual volumes may differ.
-            For custody transfer or regulatory compliance, use certified calibration per API MPMS Ch. 2.
+        <div class="alarm-strip">
+            <div class="alarm-light" id="ll-light"></div>
+            <div class="alarm-light" id="l-light"></div>
+            <div class="alarm-light on-green" id="ok-light"></div>
+            <div class="alarm-light" id="h-light"></div>
+            <div class="alarm-light" id="hh-light"></div>
+            <span id="alarm-tag" class="alarm-tag normal">NORMAL</span>
+            <span style="flex:1"></span>
+            <span id="fill-arrow" class="fill-arrow up">&uarr;</span>
+            <span id="fill-info" style="font-family:var(--mono);font-size:0.75rem;">--</span>
         </div>
-        <div class="print-footer">
-            <span id="print-generation-date"></span>
-            <div><div>Approved By:</div><div class="sig-line"></div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border);">
+            <div class="data-cell"><div class="cell-title">Total Capacity</div><div class="cell-value" id="total-capacity">--</div></div>
+            <div class="data-cell"><div class="cell-title">Current Volume</div><div class="cell-value" id="current-volume">--</div></div>
+        </div>
+        <div class="section-title" style="padding:0.3rem 0.6rem;border-bottom:1px solid var(--border);">Inventory (click to load)</div>
+        <div id="inventory-list"></div>
+        <div class="inv-totals">
+            <span>Total</span>
+            <span id="total-inventory-volume-value">--</span>
+        </div>
+        <div class="strapping-controls-row">
+            <label>Steps</label>
+            <input type="range" id="strapping-steps-slider" min="5" max="100" step="1" value="20">
+            <span class="steps-val" id="strapping-steps-label">20</span>
+        </div>
+        <div class="strapping-wrap">
+            <table class="strapping-table">
+                <thead><tr>
+                    <th>Height</th>
+                    <th id="strapping-volume-unit">Volume (m&sup3;)</th>
+                    <th>%</th>
+                    <th style="width:50px"></th>
+                </tr></thead>
+                <tbody id="strapping-table-body"></tbody>
+            </table>
+        </div>
+        <div class="disclaimer">
+            Estimates based on ideal geometry. Real tanks differ. Use certified calibration per API MPMS Ch. 2 for compliance.
+        </div>
+    </div>
+</div>
+
+<!-- ==================== TAB 2: FILL RATE & TOOLS ==================== -->
+<div class="tab-page tab-tools" id="tab-tools">
+    <!-- Fill Time Calculator -->
+    <div class="tool-card">
+        <h3>Fill Time Calculator</h3>
+        <p style="font-size:0.75rem;color:var(--muted);margin-bottom:0.6rem;">How long to fill/drain between two levels at a given flow rate?</p>
+        <div class="tool-row">
+            <div class="ctrl-group"><label>Start Level (m)</label><input type="number" id="ft-start" value="0" step="0.1"></div>
+            <div class="ctrl-group"><label>End Level (m)</label><input type="number" id="ft-end" value="5" step="0.1"></div>
+        </div>
+        <div class="ctrl-group"><label>Flow Rate</label>
+            <div style="display:flex;gap:0.3rem;">
+                <input type="number" id="ft-rate" value="10" step="0.1" style="flex:1">
+                <select id="ft-rate-unit" style="width:80px;background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:0.75rem;padding:0.2rem;">
+                    <option value="m3h">m&sup3;/hr</option>
+                    <option value="lpm">L/min</option>
+                    <option value="gpm">gal/min</option>
+                </select>
+            </div>
+        </div>
+        <div class="tool-result" id="ft-result">
+            <span class="lbl">Volume change:</span> <span class="val" id="ft-vol">--</span><br>
+            <span class="lbl">Time required:</span> <span class="val" id="ft-time">--</span><br>
+            <span class="lbl">Direction:</span> <span class="val" id="ft-dir">--</span>
         </div>
     </div>
 
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    <!-- Fill Rate from Two Readings -->
+    <div class="tool-card">
+        <h3>Fill Rate from Readings</h3>
+        <p style="font-size:0.75rem;color:var(--muted);margin-bottom:0.6rem;">Calculate fill/drain rate from two level readings over time.</p>
+        <div class="tool-row">
+            <div class="ctrl-group"><label>Reading 1 Height (m)</label><input type="number" id="fr-h1" value="1.0" step="0.1"></div>
+            <div class="ctrl-group"><label>Reading 2 Height (m)</label><input type="number" id="fr-h2" value="3.5" step="0.1"></div>
+        </div>
+        <div class="ctrl-group"><label>Time Between Readings (minutes)</label><input type="number" id="fr-time" value="60" step="1"></div>
+        <div class="tool-result" id="fr-result">
+            <span class="lbl">Volume change:</span> <span class="val" id="fr-vol">--</span><br>
+            <span class="lbl">Rate:</span> <span class="val" id="fr-rate">--</span><br>
+            <span class="lbl">Direction:</span> <span class="val" id="fr-dir">--</span><br>
+            <span class="lbl">ETA to full:</span> <span class="val" id="fr-full">--</span><br>
+            <span class="lbl">ETA to empty:</span> <span class="val" id="fr-empty">--</span>
+        </div>
+    </div>
 
-        const state = {
-            vesselType: 'cylindrical_vertical',
-            dimensions: {
-                cv_diameter: 2, cv_height: 5,
-                ch_diameter: 2, ch_length: 5,
-                r_length: 4, r_width: 3, r_height: 2,
-                co_bottom_diameter: 3, co_top_diameter: 1, co_height: 4,
-                s_diameter: 3,
-            },
-            liquidHeight: 2.5,
-            unit: 'm3',
-            alarms: { hh: 95, h: 85, l: 15, ll: 5 },
-            inventory: [
-                { id: 'T-101', type: 'cylindrical_vertical', dims: { d: 2, h: 5 }, level: 4.5 },
-                { id: 'T-102', type: 'cylindrical_horizontal', dims: { d: 3, l: 6 }, level: 1.5 },
-                { id: 'T-201', type: 'spherical', dims: { d: 4 }, level: 3.2 },
-                { id: 'T-305', type: 'rectangular', dims: { l: 5, w: 4, h: 3 }, level: 1.0 },
-            ],
-            strappingSteps: 20,
-        };
+    <!-- Volume Converter -->
+    <div class="tool-card">
+        <h3>Volume Converter</h3>
+        <p style="font-size:0.75rem;color:var(--muted);margin-bottom:0.6rem;">Convert between common volume units.</p>
+        <div class="tool-row">
+            <div class="ctrl-group"><label>Value</label><input type="number" id="vc-value" value="1" step="0.01"></div>
+            <div class="ctrl-group"><label>From</label>
+                <select id="vc-from" style="width:100%;background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:0.8rem;padding:0.3rem;">
+                    <option value="m3">Cubic Meters</option>
+                    <option value="liters">Liters</option>
+                    <option value="gallons">US Gallons</option>
+                    <option value="barrels">Barrels (oil)</option>
+                    <option value="cuft">Cubic Feet</option>
+                </select>
+            </div>
+        </div>
+        <div class="tool-result" id="vc-result" style="line-height:2;">
+            <span class="val" id="vc-m3">--</span> <span class="lbl">m&sup3;</span><br>
+            <span class="val" id="vc-l">--</span> <span class="lbl">liters</span><br>
+            <span class="val" id="vc-gal">--</span> <span class="lbl">US gallons</span><br>
+            <span class="val" id="vc-bbl">--</span> <span class="lbl">barrels</span><br>
+            <span class="val" id="vc-cuft">--</span> <span class="lbl">ft&sup3;</span>
+        </div>
+    </div>
 
-        const CONV = { m3_to_liters: 1000, m3_to_gallons: 264.172 };
+    <!-- Tank Capacity Quick Ref -->
+    <div class="tool-card">
+        <h3>Quick Capacity Reference</h3>
+        <p style="font-size:0.75rem;color:var(--muted);margin-bottom:0.6rem;">Current vessel configuration summary.</p>
+        <div class="tool-result" id="qr-result" style="line-height:2;">
+            <span class="lbl">Type:</span> <span class="val" id="qr-type">--</span><br>
+            <span class="lbl">Dimensions:</span> <span class="val" id="qr-dims">--</span><br>
+            <span class="lbl">Total capacity:</span> <span class="val" id="qr-cap-m3">--</span> <span class="lbl">m&sup3;</span><br>
+            <span class="lbl">Total capacity:</span> <span class="val" id="qr-cap-l">--</span> <span class="lbl">liters</span><br>
+            <span class="lbl">Total capacity:</span> <span class="val" id="qr-cap-gal">--</span> <span class="lbl">gallons</span><br>
+            <span class="lbl">Total capacity:</span> <span class="val" id="qr-cap-bbl">--</span> <span class="lbl">barrels</span><br>
+            <span class="lbl">Current fill:</span> <span class="val" id="qr-fill">--</span>
+        </div>
+    </div>
+</div>
 
-        const SVG_SHAPES = {
-            cylindrical_vertical: `<path class="tank-outline" d="M30,30 V270 A70,20 0 0,0 170,270 V30 M30,30 A70,20 0 0,1 170,30 A70,20 0 0,1 30,30" />`,
-            cylindrical_horizontal: `<g transform="translate(100, 150) rotate(90)"><path class="tank-outline" d="M30,30 V270 A70,20 0 0,0 170,270 V30 M30,30 A70,20 0 0,1 170,30 A70,20 0 0,1 30,30" /></g>`,
-            rectangular: `<path class="tank-outline" d="M20,50 L180,50 L180,250 L20,250 Z" />`,
-            conical: `<path class="tank-outline" d="M20,270 L180,270 L140,30 L60,30 Z" />`,
-            spherical: `<circle class="tank-outline" cx="100" cy="150" r="85" />`,
-        };
-        const SVG_CLIPS = {
-            cylindrical_vertical: `<path id="liquid-clip" d="M31,31 V269 A69,19 0 0,0 169,269 V31 A69,19 0 0,0 31,31" />`,
-            cylindrical_horizontal: `<g transform="translate(100, 150) rotate(90)"><path id="liquid-clip" d="M31,31 V269 A69,19 0 0,0 169,269 V31 A69,19 0 0,0 31,31" /></g>`,
-            rectangular: `<path id="liquid-clip" d="M21,51 L179,51 L179,249 L21,249 Z" />`,
-            conical: `<path id="liquid-clip" d="M21,269 L179,269 L139.5,31 L60.5,31 Z" />`,
-            spherical: `<circle id="liquid-clip" cx="100" cy="150" r="84" />`,
-        };
+<!-- PRINT VIEW -->
+<div id="print-view">
+    <div class="print-header">
+        <input type="text" id="print-title-input" value="Tank Strapping Chart">
+        <div class="co"><input type="text" id="print-company-input" value="ARPE Engineering"></div>
+    </div>
+    <div class="print-meta">
+        <div class="print-meta-item"><label>Tank ID</label><input type="text" id="print-tank-id" value="T-101"></div>
+        <div class="print-meta-item"><label>Location</label><input type="text" id="print-location" value=""></div>
+        <div class="print-meta-item"><label>Orientation</label><span id="print-orientation"></span></div>
+        <div class="print-meta-item"><label>Dimensions</label><span id="print-dimensions"></span></div>
+    </div>
+    <table class="print-table">
+        <thead><tr>
+            <th>Height (<span id="print-height-unit-label">m</span>)</th>
+            <th>Volume (<span id="print-volume-unit-label">m&sup3;</span>)</th>
+            <th>Percentage</th>
+        </tr></thead>
+        <tbody id="print-table-body"></tbody>
+    </table>
+    <div class="print-disclaimer"><strong>DISCLAIMER:</strong> Mathematical estimates based on ideal geometry. Use certified calibration per API MPMS Ch. 2 for compliance.</div>
+    <div class="print-footer">
+        <span id="print-generation-date"></span>
+        <div><div>Approved By:</div><div class="sig-line"></div></div>
+    </div>
+</div>
 
-        // DOM
-        const $ = id => document.getElementById(id);
-        const el = {
-            vesselType: $('vessel-type'),
-            slider: $('liquid-height-slider'),
-            heightValue: $('height-value'),
-            maxHeightLabel: $('max-height-label'),
-            volumeValue: $('volume-value'),
-            volumeUnit: $('volume-unit'),
-            percentageValue: $('percentage-value'),
-            unitToggle: $('unit-toggle'),
-            tankGroup: $('tank-shape-group'),
-            // Alarms
-            hhSlider: $('hh-slider'), hhInput: $('hh-input'),
-            hSlider: $('h-slider'), hInput: $('h-input'),
-            lSlider: $('l-slider'), lInput: $('l-input'),
-            llSlider: $('ll-slider'), llInput: $('ll-input'),
-            llLight: $('ll-light'), lLight: $('l-light'),
-            okLight: $('ok-light'),
-            hLight: $('h-light'), hhLight: $('hh-light'),
-            alarmTag: $('alarm-tag'),
-            // Fill
-            fillH1: $('fill-rate-h1'), fillH2: $('fill-rate-h2'), fillTime: $('fill-rate-time'),
-            fillArrow: $('fill-arrow'), fillInfo: $('fill-info'),
-            fillRateDisplay: $('fill-rate-display'), fillEtaDisplay: $('fill-eta-display'),
-            totalCapacity: $('total-capacity'), currentVolume: $('current-volume'),
-            // Inventory
-            invList: $('inventory-list'),
-            invTotal: $('total-inventory-volume-value'),
-            // Strapping
-            stepsSlider: $('strapping-steps-slider'), stepsLabel: $('strapping-steps-label'),
-            strapBody: $('strapping-table-body'), strapVolUnit: $('strapping-volume-unit'),
-            // Export
-            printBtn: $('print-chart-btn'), csvBtn: $('copy-csv-btn'),
-            dlCsvBtn: $('download-csv-btn'), dlJsonBtn: $('download-json-btn'),
-            // Ruler
-            rulerLeft: $('ruler-left'), rulerRight: $('ruler-right'),
-            levelInd: $('level-indicator'),
-            // Print
-            printTitle: $('print-title-input'), printCompany: $('print-company-input'),
-            printTankId: $('print-tank-id'), printLocation: $('print-location'),
-            printOrientation: $('print-orientation'), printDimensions: $('print-dimensions'),
-            printHeightUnit: $('print-height-unit-label'), printVolumeUnit: $('print-volume-unit-label'),
-            printTableBody: $('print-table-body'), printDate: $('print-generation-date'),
-        };
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const state = {
+        vesselType: 'cylindrical_vertical',
+        dimensions: {
+            cv_diameter: 2, cv_height: 5,
+            ch_diameter: 2, ch_length: 5,
+            r_length: 4, r_width: 3, r_height: 2,
+            co_bottom_diameter: 3, co_top_diameter: 1, co_height: 4,
+            s_diameter: 3,
+        },
+        liquidHeight: 2.5,
+        unit: 'm3',
+        alarms: { hh: 95, h: 85, l: 15, ll: 5 },
+        inventory: [
+            { id: 'T-101', type: 'cylindrical_vertical', dims: { d: 2, h: 5 }, level: 4.5 },
+            { id: 'T-102', type: 'cylindrical_horizontal', dims: { d: 3, l: 6 }, level: 1.5 },
+            { id: 'T-201', type: 'spherical', dims: { d: 4 }, level: 3.2 },
+            { id: 'T-305', type: 'rectangular', dims: { l: 5, w: 4, h: 3 }, level: 1.0 },
+        ],
+        strappingSteps: 20,
+    };
+    const CONV = { m3_to_liters: 1000, m3_to_gallons: 264.172, m3_to_barrels: 6.28981, m3_to_cuft: 35.3147 };
 
-        // === CALCULATORS ===
-        const Calc = {
-            cylindrical_vertical: (d, h) => {
-                const r = d.cv_diameter / 2, total = Math.PI * r * r * d.cv_height;
-                return { total, current: Math.PI * r * r * h };
-            },
-            cylindrical_horizontal: (d, h) => {
-                const r = d.ch_diameter / 2, L = d.ch_length;
-                h = Math.max(0, Math.min(h, 2 * r));
-                const total = Math.PI * r * r * L;
-                if (h === 0) return { total, current: 0 };
-                if (h >= 2 * r) return { total, current: total };
-                const a = 2 * Math.acos((r - h) / r);
-                return { total, current: (r * r / 2) * (a - Math.sin(a)) * L };
-            },
-            rectangular: (d, h) => ({
-                total: d.r_length * d.r_width * d.r_height,
-                current: d.r_length * d.r_width * h,
-            }),
-            conical: (d, h) => {
-                const bR = d.co_bottom_diameter / 2, tR = d.co_top_diameter / 2, H = d.co_height;
-                const total = (1/3) * Math.PI * H * (tR*tR + tR*bR + bR*bR);
-                if (h === 0) return { total, current: 0 };
-                const rh = bR + (tR - bR) * (h / H);
-                return { total, current: (1/3) * Math.PI * h * (bR*bR + bR*rh + rh*rh) };
-            },
-            spherical: (d, h) => {
-                const r = d.s_diameter / 2, total = (4/3) * Math.PI * r*r*r;
-                h = Math.max(0, Math.min(h, 2 * r));
-                return { total, current: (Math.PI * h * h * (3 * r - h)) / 3 };
-            },
-        };
+    // Horizontal tank: proper sideways SVG
+    const SVG_SHAPES = {
+        cylindrical_vertical: `<path class="tank-outline" d="M30,30 V270 A70,20 0 0,0 170,270 V30 M30,30 A70,20 0 0,1 170,30 A70,20 0 0,1 30,30" />`,
+        cylindrical_horizontal: `<path class="tank-outline" d="M20,70 A30,80 0 0,1 20,230 H180 A30,80 0 0,1 180,70 Z" />`,
+        rectangular: `<path class="tank-outline" d="M20,50 L180,50 L180,250 L20,250 Z" />`,
+        conical: `<path class="tank-outline" d="M20,270 L180,270 L140,30 L60,30 Z" />`,
+        spherical: `<circle class="tank-outline" cx="100" cy="150" r="85" />`,
+    };
+    const SVG_CLIPS = {
+        cylindrical_vertical: `<path d="M31,31 V269 A69,19 0 0,0 169,269 V31 A69,19 0 0,0 31,31" />`,
+        cylindrical_horizontal: `<path d="M21,71 A29,79 0 0,1 21,229 H179 A29,79 0 0,1 179,71 Z" />`,
+        rectangular: `<path d="M21,51 L179,51 L179,249 L21,249 Z" />`,
+        conical: `<path d="M21,269 L179,269 L139.5,31 L60.5,31 Z" />`,
+        spherical: `<circle cx="100" cy="150" r="84" />`,
+    };
 
-        function calcVol(type, dims, h) { return Calc[type](dims, h); }
-        function getMaxH() {
-            const d = state.dimensions;
-            switch (state.vesselType) {
-                case 'cylindrical_vertical': return d.cv_height;
-                case 'cylindrical_horizontal': return d.ch_diameter;
-                case 'rectangular': return d.r_height;
-                case 'conical': return d.co_height;
-                case 'spherical': return d.s_diameter;
-                default: return 0;
-            }
+    const $ = id => document.getElementById(id);
+    const el = {
+        vesselType: $('vessel-type'),
+        slider: $('liquid-height-slider'),
+        heightValue: $('height-value'),
+        maxHeightLabel: $('max-height-label'),
+        volumeValue: $('volume-value'),
+        volumeUnit: $('volume-unit'),
+        percentageValue: $('percentage-value'),
+        unitToggle: $('unit-toggle'),
+        tankGroup: $('tank-shape-group'),
+        tankSvg: $('tank-svg'),
+        hhSlider: $('hh-slider'), hhInput: $('hh-input'),
+        hSlider: $('h-slider'), hInput: $('h-input'),
+        lSlider: $('l-slider'), lInput: $('l-input'),
+        llSlider: $('ll-slider'), llInput: $('ll-input'),
+        llLight: $('ll-light'), lLight: $('l-light'),
+        okLight: $('ok-light'), hLight: $('h-light'), hhLight: $('hh-light'),
+        alarmTag: $('alarm-tag'),
+        fillArrow: $('fill-arrow'), fillInfo: $('fill-info'),
+        totalCapacity: $('total-capacity'), currentVolume: $('current-volume'),
+        invList: $('inventory-list'), invTotal: $('total-inventory-volume-value'),
+        stepsSlider: $('strapping-steps-slider'), stepsLabel: $('strapping-steps-label'),
+        strapBody: $('strapping-table-body'), strapVolUnit: $('strapping-volume-unit'),
+        printBtn: $('print-chart-btn'), csvBtn: $('copy-csv-btn'),
+        dlCsvBtn: $('download-csv-btn'), dlJsonBtn: $('download-json-btn'),
+        rulerLeft: $('ruler-left'), rulerRight: $('ruler-right'),
+        levelInd: $('level-indicator'),
+    };
+
+    // === CALCULATORS ===
+    const Calc = {
+        cylindrical_vertical: (d, h) => {
+            const r = d.cv_diameter / 2, total = Math.PI * r * r * d.cv_height;
+            return { total, current: Math.PI * r * r * Math.min(h, d.cv_height) };
+        },
+        cylindrical_horizontal: (d, h) => {
+            const r = d.ch_diameter / 2, L = d.ch_length;
+            h = Math.max(0, Math.min(h, 2 * r));
+            const total = Math.PI * r * r * L;
+            if (h === 0) return { total, current: 0 };
+            if (h >= 2 * r) return { total, current: total };
+            const a = 2 * Math.acos((r - h) / r);
+            return { total, current: (r * r / 2) * (a - Math.sin(a)) * L };
+        },
+        rectangular: (d, h) => ({
+            total: d.r_length * d.r_width * d.r_height,
+            current: d.r_length * d.r_width * Math.min(h, d.r_height),
+        }),
+        conical: (d, h) => {
+            const bR = d.co_bottom_diameter / 2, tR = d.co_top_diameter / 2, H = d.co_height;
+            const total = (1/3) * Math.PI * H * (tR*tR + tR*bR + bR*bR);
+            if (h <= 0) return { total, current: 0 };
+            h = Math.min(h, H);
+            const rh = bR + (tR - bR) * (h / H);
+            return { total, current: (1/3) * Math.PI * h * (bR*bR + bR*rh + rh*rh) };
+        },
+        spherical: (d, h) => {
+            const r = d.s_diameter / 2, total = (4/3) * Math.PI * r*r*r;
+            h = Math.max(0, Math.min(h, 2 * r));
+            return { total, current: (Math.PI * h * h * (3 * r - h)) / 3 };
+        },
+    };
+
+    function calcVol(type, dims, h) { return Calc[type](dims, h); }
+    function getMaxH() {
+        const d = state.dimensions;
+        switch (state.vesselType) {
+            case 'cylindrical_vertical': return d.cv_height;
+            case 'cylindrical_horizontal': return d.ch_diameter;
+            case 'rectangular': return d.r_height;
+            case 'conical': return d.co_height;
+            case 'spherical': return d.s_diameter;
+            default: return 0;
         }
-        function fmtVol(m3) {
-            if (state.unit === 'liters') return (m3 * CONV.m3_to_liters).toFixed(2);
-            if (state.unit === 'gallons') return (m3 * CONV.m3_to_gallons).toFixed(2);
-            return m3.toFixed(3);
+    }
+    function fmtVol(m3) {
+        if (state.unit === 'liters') return (m3 * CONV.m3_to_liters).toFixed(2);
+        if (state.unit === 'gallons') return (m3 * CONV.m3_to_gallons).toFixed(2);
+        return m3.toFixed(3);
+    }
+    function unitLabel() {
+        if (state.unit === 'liters') return 'L';
+        if (state.unit === 'gallons') return 'gal';
+        return 'm\u00B3';
+    }
+    function dimStr() {
+        const d = state.dimensions;
+        switch (state.vesselType) {
+            case 'cylindrical_vertical': return `\u00D8${d.cv_diameter}m \u00D7 ${d.cv_height}m H`;
+            case 'cylindrical_horizontal': return `\u00D8${d.ch_diameter}m \u00D7 ${d.ch_length}m L`;
+            case 'rectangular': return `${d.r_length} \u00D7 ${d.r_width} \u00D7 ${d.r_height}m`;
+            case 'conical': return `\u00D8${d.co_bottom_diameter}(B)\u2192${d.co_top_diameter}(T) \u00D7 ${d.co_height}m`;
+            case 'spherical': return `\u00D8${d.s_diameter}m`;
         }
-        function unitLabel() {
-            if (state.unit === 'liters') return 'L';
-            if (state.unit === 'gallons') return 'gal';
-            return 'm\u00B3';
+    }
+
+    // === BUBBLES ===
+    let bubbleInterval;
+    function startBubbles() {
+        if (bubbleInterval) clearInterval(bubbleInterval);
+        bubbleInterval = setInterval(() => {
+            const container = document.getElementById('bubble-container');
+            if (!container) return;
+            const isHoriz = state.vesselType === 'cylindrical_horizontal';
+            const cx = 30 + Math.random() * 140;
+            const cy = isHoriz ? 100 + Math.random() * 100 : 200 + Math.random() * 60;
+            const r = 1.5 + Math.random() * 3;
+            const dur = 2 + Math.random() * 3;
+            const bubble = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            bubble.setAttribute('cx', cx);
+            bubble.setAttribute('cy', cy);
+            bubble.setAttribute('r', r);
+            bubble.classList.add('bubble');
+            bubble.style.animationDuration = dur + 's';
+            container.appendChild(bubble);
+            setTimeout(() => bubble.remove(), dur * 1000);
+        }, 300);
+    }
+
+    // === SVG ===
+    function setupSVG(type) {
+        const isHoriz = type === 'cylindrical_horizontal';
+        // Horizontal: wider viewBox
+        el.tankSvg.setAttribute('viewBox', isHoriz ? '0 0 200 300' : '0 0 200 300');
+
+        el.tankGroup.innerHTML = `
+            <clipPath id="svg-clip">${SVG_CLIPS[type]}</clipPath>
+            ${SVG_SHAPES[type]}
+            <g clip-path="url(#svg-clip)">
+                <rect id="liquid-rect" fill="url(#liquidGrad)" x="0" y="0" width="200" height="300"
+                    style="transition: transform 0.4s cubic-bezier(0.4,0,0.2,1); transform-origin: bottom;"></rect>
+                <g id="bubble-container" clip-path="url(#svg-clip)"></g>
+                <line id="surface-line" class="surface-line" x1="0" y1="150" x2="200" y2="150"
+                    style="transition: y1 0.4s, y2 0.4s;" />
+            </g>`;
+        startBubbles();
+    }
+
+    function updateSVG(pct) {
+        const r = document.getElementById('liquid-rect');
+        const line = document.getElementById('surface-line');
+        if (!r) return;
+        const scale = Math.max(0, Math.min(1, pct / 100));
+        r.style.transform = `scaleY(${scale})`;
+        if (line) {
+            const y = 300 - (scale * 300);
+            line.setAttribute('y1', y);
+            line.setAttribute('y2', y);
         }
-        function dimStr() {
-            const d = state.dimensions;
-            switch (state.vesselType) {
-                case 'cylindrical_vertical': return `\u00D8${d.cv_diameter}m \u00D7 ${d.cv_height}m`;
-                case 'cylindrical_horizontal': return `\u00D8${d.ch_diameter}m \u00D7 ${d.ch_length}m`;
-                case 'rectangular': return `${d.r_length}m \u00D7 ${d.r_width}m \u00D7 ${d.r_height}m`;
-                case 'conical': return `\u00D8${d.co_bottom_diameter}m(B)\u2192\u00D8${d.co_top_diameter}m(T) \u00D7 ${d.co_height}m`;
-                case 'spherical': return `\u00D8${d.s_diameter}m`;
-            }
+    }
+
+    // === RULERS ===
+    function buildRulers() {
+        const maxH = getMaxH();
+        const ticks = 10;
+        let left = '', right = '';
+        for (let i = ticks; i >= 0; i--) {
+            const h = (maxH * i / ticks).toFixed(1);
+            const pct = i * 10;
+            const major = i % 2 === 0;
+            left += `<div class="ruler-tick"><span class="line ${major?'major':'minor'}"></span>${major?`<span class="lbl">${h}</span>`:''}</div>`;
+            right += `<div class="tick"><span class="bar ${major?'major':'minor'}"></span>${major?`<span class="plbl">${pct}%</span>`:''}</div>`;
         }
+        el.rulerLeft.innerHTML = left;
+        el.rulerRight.innerHTML = right;
+    }
 
-        // === RULERS ===
-        function buildRulers() {
-            const maxH = getMaxH();
-            const ticks = 10;
-            let leftHTML = '', rightHTML = '';
-            for (let i = ticks; i >= 0; i--) {
-                const h = (maxH * i / ticks).toFixed(2);
-                const pct = (i * 10);
-                const isMajor = i % 2 === 0;
-                leftHTML += `<div class="ruler-tick"><span class="line ${isMajor ? 'major' : 'minor'}"></span>${isMajor ? `<span class="lbl">${h}</span>` : ''}</div>`;
-                rightHTML += `<div class="tick"><span class="bar ${isMajor ? 'major' : 'minor'}"></span>${isMajor ? `<span class="plbl">${pct}%</span>` : ''}</div>`;
-            }
-            el.rulerLeft.innerHTML = leftHTML;
-            el.rulerRight.innerHTML = rightHTML;
-        }
+    function updateLevelIndicator(pct) {
+        const c = Math.max(0, Math.min(100, pct));
+        el.levelInd.style.bottom = (8 + c / 100 * 84) + '%';
+        el.levelInd.dataset.label = c.toFixed(1) + '%';
+    }
 
-        function updateLevelIndicator(pct) {
-            const clamped = Math.max(0, Math.min(100, pct));
-            // Map 0-100% to 10%-90% of container height
-            const bottom = 10 + (clamped / 100) * 80;
-            el.levelInd.style.bottom = bottom + '%';
-            el.levelInd.dataset.label = clamped.toFixed(1) + '%';
-        }
+    // === CORE UPDATE ===
+    function updateAll() {
+        const { total, current } = calcVol(state.vesselType, state.dimensions, state.liquidHeight);
+        const pct = total > 0 ? (current / total) * 100 : 0;
+        el.volumeValue.textContent = fmtVol(current);
+        el.volumeUnit.textContent = unitLabel();
+        el.percentageValue.textContent = pct.toFixed(1);
+        el.heightValue.textContent = state.liquidHeight.toFixed(2) + ' m';
+        el.maxHeightLabel.textContent = getMaxH().toFixed(2);
+        el.totalCapacity.textContent = fmtVol(total) + ' ' + unitLabel();
+        el.currentVolume.textContent = fmtVol(current) + ' ' + unitLabel();
+        updateSVG(pct);
+        updateLevelIndicator(pct);
+        updateAlarms(pct);
+        updateFillInfo();
+        genStrapping();
+        updateToolsTab();
+    }
 
-        // === SVG ===
-        function setupSVG(type) {
-            el.tankGroup.innerHTML = `
-                <clipPath id="svg-clip">${SVG_CLIPS[type]}</clipPath>
-                ${SVG_SHAPES[type]}
-                <g clip-path="url(#svg-clip)">
-                    <rect id="liquid-rect" class="liquid-fill" x="0" y="0" width="200" height="300"></rect>
-                </g>`;
-        }
-        function updateSVG(pct) {
-            const r = document.getElementById('liquid-rect');
-            if (r) r.style.transform = `scaleY(${pct / 100})`;
-        }
+    function updateAlarms(pct) {
+        const { hh, h, l, ll } = state.alarms;
+        [el.llLight, el.lLight, el.okLight, el.hLight, el.hhLight].forEach(x => x.className = 'alarm-light');
+        let status, cls;
+        if (pct >= hh) { status = 'HH ALARM'; cls = 'danger'; el.hhLight.classList.add('on-red','pulse'); el.hLight.classList.add('on-yellow'); }
+        else if (pct >= h) { status = 'HIGH'; cls = 'warning'; el.hLight.classList.add('on-yellow'); }
+        else if (pct <= ll) { status = 'LL ALARM'; cls = 'danger'; el.llLight.classList.add('on-red','pulse'); el.lLight.classList.add('on-yellow'); }
+        else if (pct <= l) { status = 'LOW'; cls = 'warning'; el.lLight.classList.add('on-yellow'); }
+        else { status = 'NORMAL'; cls = 'normal'; el.okLight.classList.add('on-green'); }
+        el.alarmTag.textContent = status;
+        el.alarmTag.className = 'alarm-tag ' + cls;
+    }
 
-        // === CORE UPDATE ===
-        function updateAll() {
-            const { total, current } = calcVol(state.vesselType, state.dimensions, state.liquidHeight);
-            const pct = total > 0 ? (current / total) * 100 : 0;
-            const maxH = getMaxH();
-
-            // Readout
-            el.volumeValue.textContent = fmtVol(current);
-            el.volumeUnit.textContent = unitLabel();
-            el.percentageValue.textContent = pct.toFixed(1);
-            el.heightValue.textContent = `${state.liquidHeight.toFixed(2)} m`;
-            el.maxHeightLabel.textContent = maxH.toFixed(2);
-            el.totalCapacity.textContent = fmtVol(total) + ' ' + unitLabel();
-            el.currentVolume.textContent = fmtVol(current) + ' ' + unitLabel();
-
-            // SVG + indicator
-            updateSVG(pct);
-            updateLevelIndicator(pct);
-
-            // Alarms
-            updateAlarms(pct);
-            // Fill rate
-            updateFillRate();
-            // Strapping
-            genStrapping();
-        }
-
-        function updateAlarms(pct) {
-            const { hh, h, l, ll } = state.alarms;
-            [el.llLight, el.lLight, el.okLight, el.hLight, el.hhLight].forEach(x => {
-                x.className = 'alarm-light';
-            });
-
-            let status, cls;
-            if (pct >= hh) {
-                status = 'HH ALARM'; cls = 'danger';
-                el.hhLight.classList.add('on-red', 'pulse');
-                el.hLight.classList.add('on-yellow');
-            } else if (pct >= h) {
-                status = 'HIGH'; cls = 'warning';
-                el.hLight.classList.add('on-yellow');
-            } else if (pct <= ll) {
-                status = 'LL ALARM'; cls = 'danger';
-                el.llLight.classList.add('on-red', 'pulse');
-                el.lLight.classList.add('on-yellow');
-            } else if (pct <= l) {
-                status = 'LOW'; cls = 'warning';
-                el.lLight.classList.add('on-yellow');
-            } else {
-                status = 'NORMAL'; cls = 'normal';
-                el.okLight.classList.add('on-green');
-            }
-            el.alarmTag.textContent = status;
-            el.alarmTag.className = 'alarm-tag ' + cls;
-        }
-
-        function updateFillRate() {
-            const h1 = parseFloat(el.fillH1.value), h2 = parseFloat(el.fillH2.value);
-            const t = parseFloat(el.fillTime.value);
-            if (isNaN(h1) || isNaN(h2) || isNaN(t) || t <= 0) {
-                el.fillRateDisplay.textContent = '--';
-                el.fillEtaDisplay.textContent = '--';
-                el.fillArrow.textContent = '\u2194'; el.fillArrow.className = 'fill-arrow stable';
-                el.fillInfo.textContent = '--';
-                return;
-            }
+    function updateFillInfo() {
+        // Quick fill info in alarm strip using fill-rate-from-readings tool inputs
+        const h1 = parseFloat($('fr-h1')?.value), h2 = parseFloat($('fr-h2')?.value);
+        const t = parseFloat($('fr-time')?.value);
+        if (!isNaN(h1) && !isNaN(h2) && !isNaN(t) && t > 0) {
             const v1 = calcVol(state.vesselType, state.dimensions, h1).current;
             const v2 = calcVol(state.vesselType, state.dimensions, h2).current;
             const ratePerHr = ((v2 - v1) / t) * 60;
+            if (Math.abs(ratePerHr) < 0.001) {
+                el.fillArrow.textContent = '\u2194'; el.fillArrow.className = 'fill-arrow stable';
+                el.fillInfo.textContent = 'Stable';
+            } else if (ratePerHr > 0) {
+                el.fillArrow.textContent = '\u2191'; el.fillArrow.className = 'fill-arrow up';
+                el.fillInfo.textContent = fmtVol(ratePerHr) + ' ' + unitLabel() + '/hr';
+            } else {
+                el.fillArrow.textContent = '\u2193'; el.fillArrow.className = 'fill-arrow down';
+                el.fillInfo.textContent = fmtVol(Math.abs(ratePerHr)) + ' ' + unitLabel() + '/hr';
+            }
+        }
+    }
 
+    // === STRAPPING ===
+    let lastCSV = '';
+    function genStrapping(forPrint) {
+        const steps = state.strappingSteps, maxH = getMaxH();
+        let html = '', csv = 'Height,Volume,Percentage\n', json = [];
+        for (let i = 0; i <= steps; i++) {
+            const h = (maxH / steps) * i;
+            const { total, current } = calcVol(state.vesselType, state.dimensions, h);
+            const pct = total > 0 ? (current / total) * 100 : 0;
+            const vol = fmtVol(current);
+            const barW = Math.max(0, Math.min(45, pct / 100 * 45));
+            html += `<tr><td>${h.toFixed(3)}</td><td>${vol}</td><td>${pct.toFixed(1)}%</td><td><span class="bar" style="width:${barW}px"></span></td></tr>`;
+            csv += `${h.toFixed(3)},${vol},${pct.toFixed(1)}\n`;
+            json.push({ height: +h.toFixed(3), volume: +vol, percentage: +pct.toFixed(1) });
+        }
+        if (!forPrint) {
+            el.strapBody.innerHTML = html;
+            el.strapVolUnit.textContent = 'Volume (' + unitLabel() + ')';
+            lastCSV = csv;
+            window._strappingJSON = json;
+        }
+        return { html, csv, json };
+    }
+
+    // === INVENTORY ===
+    function invDims(tank) {
+        const m = {};
+        switch(tank.type) {
+            case 'cylindrical_vertical': m.cv_diameter = tank.dims.d; m.cv_height = tank.dims.h; break;
+            case 'cylindrical_horizontal': m.ch_diameter = tank.dims.d; m.ch_length = tank.dims.l; break;
+            case 'rectangular': m.r_length = tank.dims.l; m.r_width = tank.dims.w; m.r_height = tank.dims.h; break;
+            case 'spherical': m.s_diameter = tank.dims.d; break;
+        }
+        return m;
+    }
+    function renderInventory() {
+        let html = '', totalVol = 0;
+        state.inventory.forEach(tank => {
+            const dims = invDims(tank);
+            const { total, current } = Calc[tank.type](dims, tank.level);
+            const pct = total > 0 ? (current / total) * 100 : 0;
+            totalVol += current;
+            html += `<div class="inv-item" data-id="${tank.id}">
+                <span class="inv-id">${tank.id}</span>
+                <div><div class="inv-bar"><div class="inv-bar-inner" style="width:${pct.toFixed(0)}%"></div></div>
+                <div class="inv-vol">${fmtVol(current)} ${unitLabel()}</div></div>
+                <span class="inv-pct">${pct.toFixed(0)}%</span>
+            </div>`;
+        });
+        el.invList.innerHTML = html;
+        el.invTotal.textContent = fmtVol(totalVol) + ' ' + unitLabel();
+    }
+
+    // === TOOLS TAB UPDATES ===
+    function updateToolsTab() {
+        // Fill Time Calculator
+        const ftStart = parseFloat($('ft-start')?.value) || 0;
+        const ftEnd = parseFloat($('ft-end')?.value) || 0;
+        const ftRate = parseFloat($('ft-rate')?.value) || 0;
+        const ftUnit = $('ft-rate-unit')?.value || 'm3h';
+        if (ftRate > 0) {
+            const v1 = calcVol(state.vesselType, state.dimensions, Math.max(0, ftStart)).current;
+            const v2 = calcVol(state.vesselType, state.dimensions, Math.max(0, ftEnd)).current;
+            const volChange = v2 - v1;
+            // Convert rate to m3/hr
+            let rateM3H = ftRate;
+            if (ftUnit === 'lpm') rateM3H = ftRate * 60 / 1000;
+            if (ftUnit === 'gpm') rateM3H = ftRate * 60 / 264.172;
+            const timeHrs = Math.abs(volChange) / rateM3H;
+            $('ft-vol').textContent = fmtVol(Math.abs(volChange)) + ' ' + unitLabel();
+            if (timeHrs < 1) $('ft-time').textContent = (timeHrs * 60).toFixed(1) + ' minutes';
+            else $('ft-time').textContent = timeHrs.toFixed(2) + ' hours';
+            $('ft-dir').textContent = volChange > 0.001 ? 'Filling' : volChange < -0.001 ? 'Draining' : 'No change';
+        }
+
+        // Fill Rate from Readings
+        const h1 = parseFloat($('fr-h1')?.value), h2 = parseFloat($('fr-h2')?.value);
+        const frTime = parseFloat($('fr-time')?.value);
+        if (!isNaN(h1) && !isNaN(h2) && !isNaN(frTime) && frTime > 0) {
+            const v1 = calcVol(state.vesselType, state.dimensions, h1).current;
+            const v2 = calcVol(state.vesselType, state.dimensions, h2).current;
+            const volDiff = v2 - v1;
+            const ratePerHr = (volDiff / frTime) * 60;
+            $('fr-vol').textContent = fmtVol(Math.abs(volDiff)) + ' ' + unitLabel();
+            $('fr-rate').textContent = fmtVol(Math.abs(ratePerHr)) + ' ' + unitLabel() + '/hr';
+            $('fr-dir').textContent = volDiff > 0.001 ? 'Filling' : volDiff < -0.001 ? 'Draining' : 'Stable';
             const curVol = calcVol(state.vesselType, state.dimensions, state.liquidHeight).current;
             const totVol = calcVol(state.vesselType, state.dimensions, getMaxH()).total;
-
-            let arrow, arrowCls, etaText;
-            if (Math.abs(ratePerHr) < 0.001) {
-                arrow = '\u2194'; arrowCls = 'stable'; etaText = 'Stable';
-            } else if (ratePerHr > 0) {
-                arrow = '\u2191'; arrowCls = 'up';
-                const hrs = (totVol - curVol) / ratePerHr;
-                etaText = `${hrs.toFixed(1)} hrs to full`;
+            if (ratePerHr > 0.001) {
+                $('fr-full').textContent = ((totVol - curVol) / ratePerHr).toFixed(1) + ' hrs';
+                $('fr-empty').textContent = 'N/A (filling)';
+            } else if (ratePerHr < -0.001) {
+                $('fr-full').textContent = 'N/A (draining)';
+                $('fr-empty').textContent = (-curVol / ratePerHr).toFixed(1) + ' hrs';
             } else {
-                arrow = '\u2193'; arrowCls = 'down';
-                const hrs = -curVol / ratePerHr;
-                etaText = `${hrs.toFixed(1)} hrs to empty`;
+                $('fr-full').textContent = '--'; $('fr-empty').textContent = '--';
             }
-            el.fillArrow.textContent = arrow;
-            el.fillArrow.className = 'fill-arrow ' + arrowCls;
-            el.fillRateDisplay.textContent = fmtVol(Math.abs(ratePerHr)) + ' ' + unitLabel() + '/hr';
-            el.fillEtaDisplay.textContent = etaText;
-            el.fillInfo.textContent = fmtVol(Math.abs(ratePerHr)) + ' ' + unitLabel() + '/hr';
         }
 
-        // === STRAPPING ===
-        let lastCSV = '';
-        function genStrapping(forPrint = false) {
-            const steps = state.strappingSteps, maxH = getMaxH();
-            let html = '', csv = 'Height,Volume,Percentage\n', json = [];
-            for (let i = 0; i <= steps; i++) {
-                const h = (maxH / steps) * i;
-                const { total, current } = calcVol(state.vesselType, state.dimensions, h);
-                const pct = total > 0 ? (current / total) * 100 : 0;
-                const vol = fmtVol(current);
-                const barW = Math.max(0, Math.min(50, pct / 100 * 50));
-                html += `<tr><td>${h.toFixed(3)}</td><td>${vol}</td><td>${pct.toFixed(1)}%</td><td><span class="bar" style="width:${barW}px"></span></td></tr>`;
-                csv += `${h.toFixed(3)},${vol},${pct.toFixed(1)}\n`;
-                json.push({ height: +h.toFixed(3), volume: +vol, percentage: +pct.toFixed(1) });
-            }
-            if (!forPrint) {
-                el.strapBody.innerHTML = html;
-                el.strapVolUnit.textContent = 'Volume (' + unitLabel() + ')';
-                lastCSV = csv;
-                window._strappingJSON = json;
-            }
-            return { html, csv, json };
-        }
+        // Volume Converter
+        const vcVal = parseFloat($('vc-value')?.value) || 0;
+        const vcFrom = $('vc-from')?.value || 'm3';
+        let m3 = vcVal;
+        if (vcFrom === 'liters') m3 = vcVal / 1000;
+        if (vcFrom === 'gallons') m3 = vcVal / 264.172;
+        if (vcFrom === 'barrels') m3 = vcVal / 6.28981;
+        if (vcFrom === 'cuft') m3 = vcVal / 35.3147;
+        $('vc-m3').textContent = m3.toFixed(4);
+        $('vc-l').textContent = (m3 * 1000).toFixed(2);
+        $('vc-gal').textContent = (m3 * 264.172).toFixed(2);
+        $('vc-bbl').textContent = (m3 * 6.28981).toFixed(4);
+        $('vc-cuft').textContent = (m3 * 35.3147).toFixed(3);
 
-        // === INVENTORY ===
-        function invDims(tank) {
-            const m = {};
-            switch(tank.type) {
-                case 'cylindrical_vertical': m.cv_diameter = tank.dims.d; m.cv_height = tank.dims.h; break;
-                case 'cylindrical_horizontal': m.ch_diameter = tank.dims.d; m.ch_length = tank.dims.l; break;
-                case 'rectangular': m.r_length = tank.dims.l; m.r_width = tank.dims.w; m.r_height = tank.dims.h; break;
-                case 'spherical': m.s_diameter = tank.dims.d; break;
-            }
-            return m;
-        }
-        function renderInventory() {
-            let html = '', totalVol = 0, totalCap = 0;
-            state.inventory.forEach(tank => {
-                const dims = invDims(tank);
-                const { total, current } = Calc[tank.type](dims, tank.level);
-                const pct = total > 0 ? (current / total) * 100 : 0;
-                totalVol += current; totalCap += total;
-                html += `<div class="inv-item" data-id="${tank.id}">
-                    <span class="inv-id">${tank.id}</span>
-                    <div>
-                        <div class="inv-bar"><div class="inv-bar-inner" style="width:${pct.toFixed(0)}%"></div></div>
-                        <div class="inv-vol">${fmtVol(current)} ${unitLabel()}</div>
-                    </div>
-                    <span class="inv-pct">${pct.toFixed(0)}%</span>
-                </div>`;
-            });
-            el.invList.innerHTML = html;
-            el.invTotal.textContent = fmtVol(totalVol) + ' ' + unitLabel();
-        }
+        // Quick Reference
+        const { total } = calcVol(state.vesselType, state.dimensions, getMaxH());
+        const { current } = calcVol(state.vesselType, state.dimensions, state.liquidHeight);
+        const pct = total > 0 ? (current / total * 100).toFixed(1) : '0.0';
+        $('qr-type').textContent = state.vesselType.replace('_', ' ');
+        $('qr-dims').textContent = dimStr();
+        $('qr-cap-m3').textContent = total.toFixed(3);
+        $('qr-cap-l').textContent = (total * 1000).toFixed(1);
+        $('qr-cap-gal').textContent = (total * 264.172).toFixed(1);
+        $('qr-cap-bbl').textContent = (total * 6.28981).toFixed(2);
+        $('qr-fill').textContent = pct + '% (' + fmtVol(current) + ' ' + unitLabel() + ')';
+    }
 
-        // === DIMENSION UPDATE ===
-        function updateDims() {
-            const type = state.vesselType;
-            document.querySelectorAll('.dim-group').forEach(g => {
-                g.classList.toggle('active', g.dataset.type === type);
-            });
-            const maxH = getMaxH();
-            el.slider.max = maxH;
-            if (state.liquidHeight > maxH) state.liquidHeight = maxH;
-            el.slider.value = state.liquidHeight;
-            setupSVG(type);
-            buildRulers();
-        }
+    // === DIM UPDATE ===
+    function updateDims() {
+        document.querySelectorAll('.dim-group').forEach(g => g.classList.toggle('active', g.dataset.type === state.vesselType));
+        const maxH = getMaxH();
+        el.slider.max = maxH;
+        if (state.liquidHeight > maxH) state.liquidHeight = maxH;
+        el.slider.value = state.liquidHeight;
+        setupSVG(state.vesselType);
+        buildRulers();
+    }
+    function readDims() {
+        const d = state.dimensions;
+        d.cv_diameter = parseFloat($('cv-diameter').value) || 0;
+        d.cv_height = parseFloat($('cv-height').value) || 0;
+        d.ch_diameter = parseFloat($('ch-diameter').value) || 0;
+        d.ch_length = parseFloat($('ch-length').value) || 0;
+        d.r_length = parseFloat($('r-length').value) || 0;
+        d.r_width = parseFloat($('r-width').value) || 0;
+        d.r_height = parseFloat($('r-height').value) || 0;
+        d.co_bottom_diameter = parseFloat($('co-bottom-diameter').value) || 0;
+        d.co_top_diameter = parseFloat($('co-top-diameter').value) || 0;
+        d.co_height = parseFloat($('co-height').value) || 0;
+        d.s_diameter = parseFloat($('s-diameter').value) || 0;
+        const maxH = getMaxH();
+        el.slider.max = maxH;
+        if (state.liquidHeight > maxH) state.liquidHeight = maxH;
+        el.slider.value = state.liquidHeight;
+        buildRulers();
+    }
 
-        function readDims() {
-            const d = state.dimensions;
-            d.cv_diameter = parseFloat($('cv-diameter').value) || 0;
-            d.cv_height = parseFloat($('cv-height').value) || 0;
-            d.ch_diameter = parseFloat($('ch-diameter').value) || 0;
-            d.ch_length = parseFloat($('ch-length').value) || 0;
-            d.r_length = parseFloat($('r-length').value) || 0;
-            d.r_width = parseFloat($('r-width').value) || 0;
-            d.r_height = parseFloat($('r-height').value) || 0;
-            d.co_bottom_diameter = parseFloat($('co-bottom-diameter').value) || 0;
-            d.co_top_diameter = parseFloat($('co-top-diameter').value) || 0;
-            d.co_height = parseFloat($('co-height').value) || 0;
-            d.s_diameter = parseFloat($('s-diameter').value) || 0;
-            const maxH = getMaxH();
-            el.slider.max = maxH;
-            if (state.liquidHeight > maxH) state.liquidHeight = maxH;
-            el.slider.value = state.liquidHeight;
-            buildRulers();
-        }
-
-        // === EVENTS ===
-        el.vesselType.addEventListener('change', e => {
-            state.vesselType = e.target.value;
-            updateDims();
-            updateAll();
-            renderInventory();
+    // === TAB SWITCHING ===
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+            $('tab-' + btn.dataset.tab).classList.add('active');
+            if (btn.dataset.tab === 'tools') updateToolsTab();
         });
+    });
 
-        document.querySelector('.panel-controls').addEventListener('input', e => {
-            if (e.target.closest('.dim-group') || e.target.closest('.dim-row')) {
-                readDims();
-                updateAll();
-                renderInventory();
-            }
-        });
-
-        el.slider.addEventListener('input', e => {
-            state.liquidHeight = parseFloat(e.target.value);
-            updateAll();
-        });
-
-        el.unitToggle.addEventListener('click', e => {
-            if (e.target.tagName !== 'BUTTON') return;
-            state.unit = e.target.dataset.unit;
-            el.unitToggle.querySelectorAll('.unit-btn').forEach(b => b.classList.remove('active'));
-            e.target.classList.add('active');
-            updateAll();
-            renderInventory();
-        });
-
-        // Alarm sliders + number inputs stay in sync
-        ['hh', 'h', 'l', 'll'].forEach(id => {
-            const slider = $(id + '-slider'), numInput = $(id + '-input');
-            slider.addEventListener('input', () => {
-                const v = parseFloat(slider.value);
-                state.alarms[id] = v;
-                numInput.value = v;
-                updateAll();
-            });
-            numInput.addEventListener('input', () => {
-                let v = parseFloat(numInput.value);
-                if (isNaN(v)) return;
-                v = Math.max(0, Math.min(100, v));
-                state.alarms[id] = v;
-                slider.value = v;
-                updateAll();
-            });
-        });
-
-        [el.fillH1, el.fillH2, el.fillTime].forEach(i => i.addEventListener('input', () => updateFillRate()));
-
-        el.stepsSlider.addEventListener('input', e => {
-            state.strappingSteps = parseInt(e.target.value);
-            el.stepsLabel.textContent = state.strappingSteps;
-            genStrapping();
-        });
-
-        el.invList.addEventListener('click', e => {
-            const item = e.target.closest('.inv-item');
-            if (!item) return;
-            const tank = state.inventory.find(t => t.id === item.dataset.id);
-            if (!tank) return;
-            el.vesselType.value = tank.type;
-            state.vesselType = tank.type;
-            const d = tank.dims;
-            switch(tank.type) {
-                case 'cylindrical_vertical': $('cv-diameter').value = d.d; $('cv-height').value = d.h; break;
-                case 'cylindrical_horizontal': $('ch-diameter').value = d.d; $('ch-length').value = d.l; break;
-                case 'rectangular': $('r-length').value = d.l; $('r-width').value = d.w; $('r-height').value = d.h; break;
-                case 'spherical': $('s-diameter').value = d.d; break;
-            }
-            readDims();
-            updateDims();
-            state.liquidHeight = tank.level;
-            el.slider.value = tank.level;
-            updateAll();
-        });
-
-        // === EXPORT HANDLERS ===
-        el.printBtn.addEventListener('click', () => {
-            el.printTankId.value = 'T-' + Math.floor(100 + Math.random() * 900);
-            $('print-orientation').textContent = state.vesselType.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase());
-            $('print-dimensions').textContent = dimStr();
-            $('print-generation-date').textContent = 'Generated by tank-level v0.2.5 | ' + new Date().toLocaleString();
-            $('print-height-unit-label').textContent = 'm';
-            $('print-volume-unit-label').textContent = unitLabel();
-            const { html } = genStrapping(true);
-            $('print-table-body').innerHTML = html;
-            window.print();
-        });
-
-        el.csvBtn.addEventListener('click', () => {
-            navigator.clipboard.writeText(lastCSV).then(() => {
-                const orig = el.csvBtn.innerHTML;
-                el.csvBtn.innerHTML = '<svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Copied!';
-                setTimeout(() => { el.csvBtn.innerHTML = orig; }, 1500);
-            });
-        });
-
-        el.dlCsvBtn.addEventListener('click', () => {
-            const blob = new Blob([lastCSV], { type: 'text/csv' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = `strapping-${state.vesselType}-${Date.now()}.csv`;
-            a.click();
-        });
-
-        el.dlJsonBtn.addEventListener('click', () => {
-            const data = {
-                vessel: state.vesselType,
-                dimensions: dimStr(),
-                unit: unitLabel(),
-                generated: new Date().toISOString(),
-                table: window._strappingJSON || [],
-            };
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = `strapping-${state.vesselType}-${Date.now()}.json`;
-            a.click();
-        });
-
-        // === INIT ===
-        readDims();
+    // === EVENTS ===
+    el.vesselType.addEventListener('change', e => {
+        state.vesselType = e.target.value;
         updateDims();
+        updateAll();
         renderInventory();
+    });
+    document.querySelector('.panel-controls').addEventListener('input', e => {
+        if (e.target.closest('.dim-group') || e.target.closest('.dim-row')) {
+            readDims(); updateAll(); renderInventory();
+        }
+    });
+    el.slider.addEventListener('input', e => { state.liquidHeight = parseFloat(e.target.value); updateAll(); });
+    el.unitToggle.addEventListener('click', e => {
+        if (e.target.tagName !== 'BUTTON') return;
+        state.unit = e.target.dataset.unit;
+        el.unitToggle.querySelectorAll('.unit-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        updateAll(); renderInventory();
+    });
+    ['hh','h','l','ll'].forEach(id => {
+        const slider = $(id+'-slider'), num = $(id+'-input');
+        slider.addEventListener('input', () => { state.alarms[id] = +slider.value; num.value = slider.value; updateAll(); });
+        num.addEventListener('input', () => { let v = Math.max(0,Math.min(100,+num.value||0)); state.alarms[id] = v; slider.value = v; updateAll(); });
+    });
+    el.stepsSlider.addEventListener('input', e => { state.strappingSteps = +e.target.value; el.stepsLabel.textContent = state.strappingSteps; genStrapping(); });
+    el.invList.addEventListener('click', e => {
+        const item = e.target.closest('.inv-item');
+        if (!item) return;
+        const tank = state.inventory.find(t => t.id === item.dataset.id);
+        if (!tank) return;
+        el.vesselType.value = tank.type; state.vesselType = tank.type;
+        const d = tank.dims;
+        switch(tank.type) {
+            case 'cylindrical_vertical': $('cv-diameter').value = d.d; $('cv-height').value = d.h; break;
+            case 'cylindrical_horizontal': $('ch-diameter').value = d.d; $('ch-length').value = d.l; break;
+            case 'rectangular': $('r-length').value = d.l; $('r-width').value = d.w; $('r-height').value = d.h; break;
+            case 'spherical': $('s-diameter').value = d.d; break;
+        }
+        readDims(); updateDims();
+        state.liquidHeight = tank.level; el.slider.value = tank.level;
         updateAll();
     });
-    </script>
+
+    // Tools tab inputs
+    ['ft-start','ft-end','ft-rate','ft-rate-unit','fr-h1','fr-h2','fr-time','vc-value','vc-from'].forEach(id => {
+        const e = $(id);
+        if (e) e.addEventListener('input', () => updateToolsTab());
+    });
+
+    // === EXPORT ===
+    el.printBtn.addEventListener('click', () => {
+        $('print-tank-id').value = 'T-' + Math.floor(100 + Math.random()*900);
+        $('print-orientation').textContent = state.vesselType.replace('_',' ').replace(/\b\w/g,c=>c.toUpperCase());
+        $('print-dimensions').textContent = dimStr();
+        $('print-generation-date').textContent = 'Generated by tank-level v0.3.0 | ' + new Date().toLocaleString();
+        $('print-height-unit-label').textContent = 'm';
+        $('print-volume-unit-label').textContent = unitLabel();
+        $('print-table-body').innerHTML = genStrapping(true).html;
+        window.print();
+    });
+    el.csvBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(lastCSV).then(() => {
+            const o = el.csvBtn.innerHTML;
+            el.csvBtn.innerHTML = '<svg viewBox="0 0 24 24" style="width:13px;height:13px;fill:currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Copied!';
+            setTimeout(() => { el.csvBtn.innerHTML = o; }, 1500);
+        });
+    });
+    el.dlCsvBtn.addEventListener('click', () => {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(new Blob([lastCSV], {type:'text/csv'}));
+        a.download = `strapping-${state.vesselType}-${Date.now()}.csv`; a.click();
+    });
+    el.dlJsonBtn.addEventListener('click', () => {
+        const data = { vessel: state.vesselType, dimensions: dimStr(), unit: unitLabel(), generated: new Date().toISOString(), table: window._strappingJSON || [] };
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(new Blob([JSON.stringify(data,null,2)], {type:'application/json'}));
+        a.download = `strapping-${state.vesselType}-${Date.now()}.json`; a.click();
+    });
+
+    // === INIT ===
+    readDims(); updateDims(); renderInventory(); updateAll();
+});
+</script>
 </body>
 </html>
