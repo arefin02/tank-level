@@ -134,7 +134,7 @@
 
         /* === CALCULATOR TAB === */
         .tab-calc {
-            grid-template-columns: 240px 220px 1fr;
+            grid-template-columns: 220px 1fr 1fr;
             gap: 0;
             height: calc(100vh - 68px);
             min-height: 500px;
@@ -147,13 +147,43 @@
         }
         .panel-tank {
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             border-right: 1px solid var(--border);
             background: rgba(0,0,0,0.2);
-            padding: 0.75rem 0.5rem;
+            padding: 0.5rem;
             position: relative;
             overflow: hidden;
+        }
+        .zoom-controls {
+            display: flex;
+            gap: 0.3rem;
+            position: absolute;
+            top: 0.4rem;
+            right: 0.4rem;
+            z-index: 10;
+        }
+        .zoom-btn {
+            width: 28px; height: 28px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: var(--surface);
+            color: var(--text);
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: border-color 0.15s;
+        }
+        .zoom-btn:hover { border-color: var(--cyan); }
+        .zoom-level {
+            font-size: 0.6rem;
+            font-family: var(--mono);
+            color: var(--muted);
+            padding: 0 0.3rem;
+            line-height: 28px;
         }
         .panel-data {
             display: flex;
@@ -309,7 +339,11 @@
             align-items: center;
             justify-content: center;
         }
-        #tank-svg { max-width: 180px; max-height: 90%; }
+        #tank-svg {
+            width: 100%;
+            height: 100%;
+            transition: transform 0.2s;
+        }
         .tank-outline { stroke: var(--cyan); stroke-width: 2; fill: none; }
 
         /* Liquid gradient fill */
@@ -335,72 +369,7 @@
             fill: none;
         }
 
-        /* Ruler */
-        .ruler {
-            position: absolute;
-            left: 2px;
-            top: 8%;
-            bottom: 8%;
-            width: 30px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            pointer-events: none;
-        }
-        .ruler-tick { display: flex; align-items: center; height: 0; position: relative; }
-        .ruler-tick .line { width: 12px; height: 1px; margin-left: auto; }
-        .ruler-tick .line.major { background: var(--cyan); width: 18px; }
-        .ruler-tick .line.minor { background: rgba(0,212,255,0.25); }
-        .ruler-tick .lbl {
-            position: absolute;
-            right: 20px;
-            font-size: 0.55rem;
-            font-family: var(--mono);
-            color: var(--cyan);
-            white-space: nowrap;
-        }
-        .ruler-pct {
-            position: absolute;
-            right: 2px;
-            top: 8%;
-            bottom: 8%;
-            width: 34px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            pointer-events: none;
-        }
-        .ruler-pct .tick { display: flex; align-items: center; height: 0; }
-        .ruler-pct .tick .bar { height: 1px; width: 10px; }
-        .ruler-pct .tick .bar.major { background: var(--purple); width: 14px; }
-        .ruler-pct .tick .bar.minor { background: rgba(123,47,190,0.25); }
-        .ruler-pct .tick .plbl {
-            font-size: 0.55rem;
-            font-family: var(--mono);
-            color: var(--purple);
-            margin-left: 2px;
-        }
-
-        .level-indicator {
-            position: absolute;
-            left: 32px;
-            right: 36px;
-            height: 2px;
-            background: var(--yellow);
-            box-shadow: 0 0 6px var(--yellow);
-            transition: bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            pointer-events: none;
-        }
-        .level-indicator::after {
-            content: attr(data-label);
-            position: absolute;
-            right: -36px;
-            top: -7px;
-            font-size: 0.6rem;
-            font-family: var(--mono);
-            color: var(--yellow);
-            font-weight: 600;
-        }
+        /* Graduations are now SVG-embedded */
 
         /* === DATA PANELS === */
         .data-cell {
@@ -556,7 +525,7 @@
 <!-- TOOLBAR -->
 <div class="toolbar">
     <span class="logo">tank-level</span>
-    <span class="version">v0.3.0</span>
+    <span class="version">v0.3.1</span>
     <div class="tab-bar">
         <button class="tab-btn active" data-tab="calc">Calculator</button>
         <button class="tab-btn" data-tab="tools">Fill Rate &amp; Tools</button>
@@ -664,20 +633,24 @@
 
     <!-- CENTER: Tank SVG -->
     <div class="panel-tank">
-        <div class="ruler" id="ruler-left"></div>
-        <div class="tank-svg-wrap">
-            <svg id="tank-svg" viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet">
+        <div class="zoom-controls">
+            <button class="zoom-btn" id="zoom-out">-</button>
+            <span class="zoom-level" id="zoom-label">100%</span>
+            <button class="zoom-btn" id="zoom-in">+</button>
+            <button class="zoom-btn" id="zoom-reset" style="font-size:0.6rem;">FIT</button>
+        </div>
+        <div class="tank-svg-wrap" style="overflow:auto;">
+            <svg id="tank-svg" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet">
                 <defs>
                     <linearGradient id="liquidGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="rgba(0,212,255,0.6)" />
-                        <stop offset="100%" stop-color="rgba(0,100,200,0.85)" />
+                        <stop offset="0%" stop-color="rgba(0,212,255,0.55)" />
+                        <stop offset="40%" stop-color="rgba(0,150,220,0.7)" />
+                        <stop offset="100%" stop-color="rgba(0,80,180,0.9)" />
                     </linearGradient>
                 </defs>
                 <g id="tank-shape-group"></g>
             </svg>
         </div>
-        <div class="level-indicator" id="level-indicator" data-label="" style="bottom:50%;"></div>
-        <div class="ruler-pct" id="ruler-right"></div>
     </div>
 
     <!-- RIGHT: Data panels -->
@@ -867,20 +840,23 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     const CONV = { m3_to_liters: 1000, m3_to_gallons: 264.172, m3_to_barrels: 6.28981, m3_to_cuft: 35.3147 };
 
-    // Horizontal tank: proper sideways SVG
+    // SVG tank shapes — all drawn in a 400x300 viewBox
+    // Horizontal cylinder: proper capsule/pill shape (circle endcaps + straight body)
     const SVG_SHAPES = {
-        cylindrical_vertical: `<path class="tank-outline" d="M30,30 V270 A70,20 0 0,0 170,270 V30 M30,30 A70,20 0 0,1 170,30 A70,20 0 0,1 30,30" />`,
-        cylindrical_horizontal: `<path class="tank-outline" d="M20,70 A30,80 0 0,1 20,230 H180 A30,80 0 0,1 180,70 Z" />`,
-        rectangular: `<path class="tank-outline" d="M20,50 L180,50 L180,250 L20,250 Z" />`,
-        conical: `<path class="tank-outline" d="M20,270 L180,270 L140,30 L60,30 Z" />`,
-        spherical: `<circle class="tank-outline" cx="100" cy="150" r="85" />`,
+        cylindrical_vertical: `<path class="tank-outline" d="M70,30 V260 A60,20 0 0,0 250,260 V30 M70,30 A60,20 0 0,1 250,30 A60,20 0 0,1 70,30" />`,
+        cylindrical_horizontal: `<ellipse class="tank-outline" cx="200" cy="150" rx="170" ry="80" />
+            <line class="tank-outline" x1="70" y1="70" x2="70" y2="230" opacity="0.3"/>
+            <line class="tank-outline" x1="330" y1="70" x2="330" y2="230" opacity="0.3"/>`,
+        rectangular: `<path class="tank-outline" d="M40,40 L360,40 L360,260 L40,260 Z" />`,
+        conical: `<path class="tank-outline" d="M40,270 L360,270 L280,30 L120,30 Z" />`,
+        spherical: `<circle class="tank-outline" cx="200" cy="150" r="120" />`,
     };
     const SVG_CLIPS = {
-        cylindrical_vertical: `<path d="M31,31 V269 A69,19 0 0,0 169,269 V31 A69,19 0 0,0 31,31" />`,
-        cylindrical_horizontal: `<path d="M21,71 A29,79 0 0,1 21,229 H179 A29,79 0 0,1 179,71 Z" />`,
-        rectangular: `<path d="M21,51 L179,51 L179,249 L21,249 Z" />`,
-        conical: `<path d="M21,269 L179,269 L139.5,31 L60.5,31 Z" />`,
-        spherical: `<circle cx="100" cy="150" r="84" />`,
+        cylindrical_vertical: `<path d="M71,31 V259 A59,19 0 0,0 249,259 V31 A59,19 0 0,0 71,31" />`,
+        cylindrical_horizontal: `<ellipse cx="200" cy="150" rx="169" ry="79" />`,
+        rectangular: `<path d="M41,41 L359,41 L359,259 L41,259 Z" />`,
+        conical: `<path d="M41,269 L359,269 L279,31 L121,31 Z" />`,
+        spherical: `<circle cx="200" cy="150" r="119" />`,
     };
 
     const $ = id => document.getElementById(id);
@@ -909,8 +885,7 @@ document.addEventListener('DOMContentLoaded', () => {
         strapBody: $('strapping-table-body'), strapVolUnit: $('strapping-volume-unit'),
         printBtn: $('print-chart-btn'), csvBtn: $('copy-csv-btn'),
         dlCsvBtn: $('download-csv-btn'), dlJsonBtn: $('download-json-btn'),
-        rulerLeft: $('ruler-left'), rulerRight: $('ruler-right'),
-        levelInd: $('level-indicator'),
+        zoomIn: $('zoom-in'), zoomOut: $('zoom-out'), zoomReset: $('zoom-reset'),
     };
 
     // === CALCULATORS ===
@@ -988,8 +963,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const container = document.getElementById('bubble-container');
             if (!container) return;
             const isHoriz = state.vesselType === 'cylindrical_horizontal';
-            const cx = 30 + Math.random() * 140;
-            const cy = isHoriz ? 100 + Math.random() * 100 : 200 + Math.random() * 60;
+            const cx = 60 + Math.random() * 280;
+            const cy = isHoriz ? 120 + Math.random() * 80 : 200 + Math.random() * 60;
             const r = 1.5 + Math.random() * 3;
             const dur = 2 + Math.random() * 3;
             const bubble = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
@@ -1004,58 +979,72 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // === SVG ===
+    let svgZoom = 1;
     function setupSVG(type) {
-        const isHoriz = type === 'cylindrical_horizontal';
-        // Horizontal: wider viewBox
-        el.tankSvg.setAttribute('viewBox', isHoriz ? '0 0 200 300' : '0 0 200 300');
+        el.tankSvg.setAttribute('viewBox', '0 0 400 300');
+
+        // Build graduation marks on the tank
+        let gradMarks = '';
+        const maxH = getMaxH();
+        const numTicks = 10;
+        for (let i = 0; i <= numTicks; i++) {
+            const pct = i / numTicks;
+            const y = 270 - pct * 240; // maps 0-100% to y=270 down to y=30
+            const isMajor = i % 2 === 0;
+            const tickLen = isMajor ? 20 : 10;
+            const heightVal = (maxH * pct).toFixed(1);
+            // Left-side graduation ticks
+            gradMarks += `<line x1="15" y1="${y}" x2="${15 + tickLen}" y2="${y}" stroke="${isMajor ? '#00D4FF' : 'rgba(0,212,255,0.3)'}" stroke-width="${isMajor ? 1.5 : 0.8}" />`;
+            if (isMajor) {
+                gradMarks += `<text x="10" y="${y + 3}" fill="#00D4FF" font-size="9" font-family="JetBrains Mono, monospace" text-anchor="end">${heightVal}</text>`;
+            }
+            // Right-side percentage ticks
+            gradMarks += `<line x1="${400 - 15 - tickLen}" y1="${y}" x2="${400 - 15}" y2="${y}" stroke="${isMajor ? '#7B2FBE' : 'rgba(123,47,190,0.3)'}" stroke-width="${isMajor ? 1.5 : 0.8}" />`;
+            if (isMajor) {
+                gradMarks += `<text x="${400 - 10}" y="${y + 3}" fill="#7B2FBE" font-size="9" font-family="JetBrains Mono, monospace" text-anchor="start">${(pct * 100).toFixed(0)}%</text>`;
+            }
+        }
 
         el.tankGroup.innerHTML = `
             <clipPath id="svg-clip">${SVG_CLIPS[type]}</clipPath>
             ${SVG_SHAPES[type]}
             <g clip-path="url(#svg-clip)">
-                <rect id="liquid-rect" fill="url(#liquidGrad)" x="0" y="0" width="200" height="300"
+                <rect id="liquid-rect" fill="url(#liquidGrad)" x="0" y="0" width="400" height="300"
                     style="transition: transform 0.4s cubic-bezier(0.4,0,0.2,1); transform-origin: bottom;"></rect>
                 <g id="bubble-container" clip-path="url(#svg-clip)"></g>
-                <line id="surface-line" class="surface-line" x1="0" y1="150" x2="200" y2="150"
+                <line id="surface-line" class="surface-line" x1="30" y1="150" x2="370" y2="150"
                     style="transition: y1 0.4s, y2 0.4s;" />
-            </g>`;
+            </g>
+            ${gradMarks}
+            <line id="level-line" x1="30" y1="150" x2="370" y2="150" stroke="#ffc107" stroke-width="1.5" stroke-dasharray="6,3" opacity="0.8"
+                style="transition: y1 0.4s, y2 0.4s;" />
+            <text id="level-label" x="375" y="153" fill="#ffc107" font-size="10" font-family="JetBrains Mono, monospace" font-weight="600"
+                style="transition: y 0.4s;">50%</text>`;
         startBubbles();
     }
 
     function updateSVG(pct) {
         const r = document.getElementById('liquid-rect');
-        const line = document.getElementById('surface-line');
+        const surfLine = document.getElementById('surface-line');
+        const levelLine = document.getElementById('level-line');
+        const levelLabel = document.getElementById('level-label');
         if (!r) return;
         const scale = Math.max(0, Math.min(1, pct / 100));
         r.style.transform = `scaleY(${scale})`;
-        if (line) {
-            const y = 300 - (scale * 300);
-            line.setAttribute('y1', y);
-            line.setAttribute('y2', y);
-        }
+        const y = 270 - scale * 240;
+        if (surfLine) { surfLine.setAttribute('y1', y); surfLine.setAttribute('y2', y); }
+        if (levelLine) { levelLine.setAttribute('y1', y); levelLine.setAttribute('y2', y); }
+        if (levelLabel) { levelLabel.setAttribute('y', y + 3); levelLabel.textContent = pct.toFixed(1) + '%'; }
     }
 
-    // === RULERS ===
-    function buildRulers() {
-        const maxH = getMaxH();
-        const ticks = 10;
-        let left = '', right = '';
-        for (let i = ticks; i >= 0; i--) {
-            const h = (maxH * i / ticks).toFixed(1);
-            const pct = i * 10;
-            const major = i % 2 === 0;
-            left += `<div class="ruler-tick"><span class="line ${major?'major':'minor'}"></span>${major?`<span class="lbl">${h}</span>`:''}</div>`;
-            right += `<div class="tick"><span class="bar ${major?'major':'minor'}"></span>${major?`<span class="plbl">${pct}%</span>`:''}</div>`;
-        }
-        el.rulerLeft.innerHTML = left;
-        el.rulerRight.innerHTML = right;
+    function setZoom(z) {
+        svgZoom = Math.max(0.5, Math.min(3, z));
+        el.tankSvg.style.transform = `scale(${svgZoom})`;
+        const zoomLabel = document.getElementById('zoom-label');
+        if (zoomLabel) zoomLabel.textContent = Math.round(svgZoom * 100) + '%';
     }
 
-    function updateLevelIndicator(pct) {
-        const c = Math.max(0, Math.min(100, pct));
-        el.levelInd.style.bottom = (8 + c / 100 * 84) + '%';
-        el.levelInd.dataset.label = c.toFixed(1) + '%';
-    }
+    // Graduations are now built inside setupSVG as part of the tank SVG
 
     // === CORE UPDATE ===
     function updateAll() {
@@ -1069,7 +1058,7 @@ document.addEventListener('DOMContentLoaded', () => {
         el.totalCapacity.textContent = fmtVol(total) + ' ' + unitLabel();
         el.currentVolume.textContent = fmtVol(current) + ' ' + unitLabel();
         updateSVG(pct);
-        updateLevelIndicator(pct);
+
         updateAlarms(pct);
         updateFillInfo();
         genStrapping();
@@ -1244,7 +1233,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (state.liquidHeight > maxH) state.liquidHeight = maxH;
         el.slider.value = state.liquidHeight;
         setupSVG(state.vesselType);
-        buildRulers();
     }
     function readDims() {
         const d = state.dimensions;
@@ -1263,7 +1251,7 @@ document.addEventListener('DOMContentLoaded', () => {
         el.slider.max = maxH;
         if (state.liquidHeight > maxH) state.liquidHeight = maxH;
         el.slider.value = state.liquidHeight;
-        buildRulers();
+        setupSVG(state.vesselType); // rebuild SVG with updated graduations
     }
 
     // === TAB SWITCHING ===
@@ -1303,6 +1291,16 @@ document.addEventListener('DOMContentLoaded', () => {
         num.addEventListener('input', () => { let v = Math.max(0,Math.min(100,+num.value||0)); state.alarms[id] = v; slider.value = v; updateAll(); });
     });
     el.stepsSlider.addEventListener('input', e => { state.strappingSteps = +e.target.value; el.stepsLabel.textContent = state.strappingSteps; genStrapping(); });
+    // Zoom controls
+    el.zoomIn.addEventListener('click', () => setZoom(svgZoom + 0.25));
+    el.zoomOut.addEventListener('click', () => setZoom(svgZoom - 0.25));
+    el.zoomReset.addEventListener('click', () => setZoom(1));
+    // Mouse wheel zoom on tank panel
+    document.querySelector('.panel-tank').addEventListener('wheel', e => {
+        e.preventDefault();
+        setZoom(svgZoom + (e.deltaY < 0 ? 0.15 : -0.15));
+    }, { passive: false });
+
     el.invList.addEventListener('click', e => {
         const item = e.target.closest('.inv-item');
         if (!item) return;
@@ -1332,7 +1330,7 @@ document.addEventListener('DOMContentLoaded', () => {
         $('print-tank-id').value = 'T-' + Math.floor(100 + Math.random()*900);
         $('print-orientation').textContent = state.vesselType.replace('_',' ').replace(/\b\w/g,c=>c.toUpperCase());
         $('print-dimensions').textContent = dimStr();
-        $('print-generation-date').textContent = 'Generated by tank-level v0.3.0 | ' + new Date().toLocaleString();
+        $('print-generation-date').textContent = 'Generated by tank-level v0.3.1 | ' + new Date().toLocaleString();
         $('print-height-unit-label').textContent = 'm';
         $('print-volume-unit-label').textContent = unitLabel();
         $('print-table-body').innerHTML = genStrapping(true).html;
