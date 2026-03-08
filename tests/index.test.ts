@@ -79,6 +79,30 @@ describe("calculateVolume", () => {
     expect(result.volume).toBeCloseTo(expected, 2);
   });
 
+  it("should calculate volume for spherical vessel", () => {
+    const config: VesselConfig = {
+      type: "spherical",
+      dimensions: { diameter: 2 },
+    };
+
+    // Test empty
+    let result = calculateVolume(config, 0);
+    expect(result.volume).toBe(0);
+    expect(result.percentage).toBe(0);
+
+    // Test full (diameter = 2, radius = 1)
+    // Total volume = (4/3) * π * r³ = (4/3) * π
+    result = calculateVolume(config, 2);
+    expect(result.volume).toBeCloseTo((4 / 3) * Math.PI, 2);
+    expect(result.percentage).toBe(100);
+
+    // Test half full (height = radius = 1)
+    // Volume = (1/3) * π * h² * (3r - h) = (1/3) * π * 1 * (3 - 1) = (2/3) * π
+    result = calculateVolume(config, 1);
+    expect(result.volume).toBeCloseTo((2 / 3) * Math.PI, 2);
+    expect(result.percentage).toBeCloseTo(50, 1);
+  });
+
   // Existing tests remain unchanged...
 });
 
